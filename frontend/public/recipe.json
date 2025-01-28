@@ -1,0 +1,714 @@
+[
+  {
+    "id": 1,
+    "name": "Nihari",
+    "category": "Main Course",
+    "image": "https://i.ibb.co/C8Vc49Y/Nihari.jpg",
+    "description": "A slow-cooked beef stew flavored with traditional Pakistani spices, resulting in a rich and hearty dish.",
+    "ingredients": [
+      "2 lbs beef shank",
+      "1 cup fried onions",
+      "2 tbsp ginger garlic paste",
+      "1/2 cup oil",
+      "Spices: Nihari masala, salt",
+      "6 cups water",
+      "Garnish: julienned ginger, chopped cilantro, lemon wedges"
+    ],
+    "steps": [
+      "Heat oil in a pot and sauté ginger garlic paste.",
+      "Add beef shank pieces and brown them.",
+      "Incorporate fried onions and Nihari masala; cook for a few minutes.",
+      "Pour in water, bring to a boil, then simmer until meat is tender.",
+      "Adjust consistency with flour slurry if needed.",
+      "Serve hot, garnished with ginger, cilantro, and lemon wedges."
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Mutton Biryani",
+    "category": "Main Course",
+    "image": "https://i.ibb.co/f2HfkPP/Mutton-Biryani2.jpg",
+    "description": "A fragrant rice dish layered with tender mutton and aromatic spices, a staple in Pakistani cuisine.",
+    "ingredients": [
+      "2 lbs mutton pieces",
+      "2 cups basmati rice",
+      "1 cup yogurt",
+      "2 onions, sliced",
+      "Spices: biryani masala, saffron, salt",
+      "Fresh herbs: mint, cilantro",
+      "Ghee or oil"
+    ],
+    "steps": [
+      "Marinate mutton with yogurt and biryani masala; set aside.",
+      "Fry onions until golden brown; remove half for garnishing.",
+      "Add marinated mutton to the pot; cook until meat is tender.",
+      "Parboil rice with whole spices; drain.",
+      "Layer rice and mutton in a pot, sprinkling fried onions, herbs, and saffron between layers.",
+      "Seal the pot and cook on low heat (dum) for 20-25 minutes.",
+      "Serve hot with raita."
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Karahi Gosht (With Beef)",
+    "category": "Main Course",
+    "image": "https://i.ibb.co/zmm9ZDw/Beef-Karahi.jpg",
+    "description": "A spicy and flavorful beef curry cooked in a wok-like pan, known as 'karahi', popular in Pakistani cuisine.",
+    "ingredients": [
+      "2 lbs beef cubes",
+      "4 tomatoes, chopped",
+      "2 green chilies, sliced",
+      "2 tbsp ginger garlic paste",
+      "Spices: red chili powder, garam masala, salt",
+      "Fresh cilantro for garnish",
+      "Oil"
+    ],
+    "steps": [
+      "Heat oil in a karahi; sauté ginger garlic paste.",
+      "Add beef cubes; cook until browned.",
+      "Incorporate chopped tomatoes and green chilies; cook until tomatoes soften.",
+      "Add spices; continue cooking until oil separates.",
+      "Garnish with fresh cilantro and serve hot with naan."
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Bihari Kabab",
+    "category": "Appetizer",
+    "image": "https://i.ibb.co/hZCtkGR/Behrai-kabab.webp",
+    "description": "Tender beef strips marinated in a spicy yogurt mixture, traditionally grilled over charcoal for a smoky flavor.",
+    "ingredients": [
+      "2 lbs beef strips",
+      "1 cup yogurt",
+      "2 tbsp papaya paste",
+      "Spices: red chili powder, cumin powder, garam masala, salt",
+      "Fried onions, crushed",
+      "Oil"
+    ],
+    "steps": [
+      "Marinate beef strips with yogurt, papaya paste, spices, and crushed fried onions; refrigerate for a few hours.",
+      "Skewer the marinated beef and grill over charcoal until cooked through.",
+      "Serve hot with naan and chutney."
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Tandoori Shrimp",
+    "category": "Appetizer",
+    "image": "https://i.ibb.co/12gtdyX/Tandoori-Shrimp.jpg",
+    "description": "Juicy shrimp marinated in a blend of yogurt and tandoori spices, then grilled to perfection.",
+    "ingredients": [
+      "1 lb large shrimp, peeled and deveined",
+      "1 cup yogurt",
+      "Spices: tandoori masala, red chili powder, turmeric, salt",
+      "Lemon juice",
+      "Oil"
+    ],
+    "steps": [
+      "Marinate shrimp with yogurt, spices, and lemon juice; let sit for 30 minutes.",
+      "Thread shrimp onto skewers and grill until cooked through.",
+      "Serve hot with lemon wedges and mint chutney."
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Dal Fry ",
+    "category": "Main Course",
+    "image": "https://i.ibb.co/SRCzSx2/Dal-Fry.jpg",
+    "description": "A hearty and comforting mixed lentil curry, seasoned with aromatic spices, reminiscent of roadside eateries.",
+    "ingredients": [
+      "1 cup mixed lentils (toor dal, moong dal, masoor dal)",
+      "1 onion, chopped",
+      "2 tomatoes, chopped",
+      "2 green chilies, slit",
+      "Spices: cumin seeds, turmeric, red chili powder, garam masala, salt",
+      "Fresh cilantro for garnish",
+      "Ghee or oil"
+    ],
+    "steps": [
+      "Rinse and cook lentils until soft; set aside.",
+      "In a pan, heat ghee; add cumin seeds and let them splutter.",
+      "Sauté onions until translucent; add tomatoes and green chilies.",
+      "Add spices; cook until oil separates.",
+      "Mix in cooked lentils; simmer for a few minutes.",
+      "Garnish with fresh cilantro and serve hot with rice or roti."
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Chicken Biryani",
+    "category": "Main Course",
+    "image": "https://i.ibb.co/kymNwy3/download.jpg",
+    "description": "A flavorful rice and chicken dish.",
+    "ingredients": [
+      "2 cups of rice",
+      "500g chicken",
+      "1 onion, sliced",
+      "Spices (turmeric, cumin, coriander, etc.)"
+    ],
+    "steps": [
+      "Cook the rice separately.",
+      "Marinate the chicken with spices.",
+      "Fry the onions and add the chicken.",
+      "Layer the rice and chicken together, then steam."
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Aloo Paratha",
+    "category": "Breakfast",
+    "image": "https://i.ibb.co/6XQmpPr/Aloo-Paratha.jpg",
+    "description": "A popular breakfast dish featuring whole wheat flatbread stuffed with a spiced potato filling, served hot with yogurt or pickles.",
+    "ingredients": [
+      "2 cups whole wheat flour",
+      "Water, as needed",
+      "2 large potatoes, boiled and mashed",
+      "1 small onion, finely chopped",
+      "2 green chilies, finely chopped",
+      "1 tsp cumin seeds",
+      "1 tsp garam masala",
+      "1 tsp red chili powder",
+      "Salt, to taste",
+      "Fresh cilantro, chopped",
+      "Ghee or oil, for cooking"
+    ],
+    "steps": [
+      "In a bowl, mix whole wheat flour with water to form a soft dough; cover and let it rest for 20 minutes.",
+      "In another bowl, combine mashed potatoes, chopped onion, green chilies, cumin seeds, garam masala, red chili powder, salt, and chopped cilantro to prepare the filling.",
+      "Divide the dough into equal portions and roll each into a ball.",
+      "Flatten a dough ball, place a portion of the potato filling in the center, and fold the edges over to encase the filling.",
+      "Gently roll out the stuffed dough ball into a flat disc, being careful not to expose the filling.",
+      "Heat a tawa or skillet over medium heat; cook the paratha on both sides, applying ghee or oil, until golden brown.",
+      "Serve hot with yogurt or pickles."
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Chicken Karahi",
+    "category": "Main Course",
+    "image": "https://i.ibb.co/T8W501X/Chicken-Karahi.jpg",
+    "description": "A classic Pakistani dish featuring chicken cooked in a wok with tomatoes, green chilies, and a blend of spices, resulting in a flavorful curry.",
+    "ingredients": [
+      "1 kg chicken, cut into pieces",
+      "4 large tomatoes, chopped",
+      "2 tbsp ginger garlic paste",
+      "4-5 green chilies, sliced",
+      "1 tsp red chili powder",
+      "1 tsp cumin seeds",
+      "1 tsp garam masala",
+      "Salt, to taste",
+      "Fresh cilantro, chopped",
+      "Fresh ginger, julienned",
+      "Oil, for cooking"
+    ],
+    "steps": [
+      "Heat oil in a karahi (wok) over medium heat; add cumin seeds and let them splutter.",
+      "Add ginger garlic paste; sauté until fragrant.",
+      "Add chicken pieces; cook until they turn white.",
+      "Incorporate chopped tomatoes; cook until they soften and oil separates.",
+      "Add red chili powder and salt; mix well.",
+      "Add sliced green chilies; continue cooking until chicken is fully cooked and the gravy thickens.",
+      "Sprinkle garam masala and garnish with chopped cilantro and julienned ginger.",
+      "Serve hot with naan or roti."
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Palak Paneer",
+    "category": "Main Course",
+    "image": "https://i.ibb.co/xhgznPj/Palak-Paneer.jpg",
+    "description": "A vegetarian delight featuring paneer cubes simmered in a creamy spinach gravy, seasoned with aromatic spices.",
+    "ingredients": [
+      "250g paneer, cubed",
+      "500g fresh spinach leaves, washed",
+      "1 large onion, finely chopped",
+      "2 tomatoes, pureed",
+      "2 green chilies, chopped",
+      "1 tbsp ginger garlic paste",
+      "1 tsp cumin seeds",
+      "1 tsp garam masala",
+      "1/2 tsp turmeric powder",
+      "1/2 tsp red chili powder",
+      "Salt, to taste",
+      "2 tbsp cream",
+      "Oil or ghee, for cooking"
+    ],
+    "steps": [
+      "Blanch spinach leaves in boiling water for 2-3 minutes; drain and immediately transfer to ice water to retain color.",
+      "Blend the blanched spinach into a smooth puree; set aside.",
+      "Heat oil or ghee in a pan; add cumin seeds and let them splutter.",
+      "Add finely chopped onion; sauté until golden brown.",
+      "Add ginger garlic paste; cook until raw smell disappears.",
+      "Incorporate tomato puree; cook until oil separates.",
+      "Add turmeric powder, red chili powder, and salt; mix well.",
+      "Pour in the spinach puree; stir to combine and cook for a few minutes.",
+      "Add paneer cubes and chopped green chilies; simmer for 5-7 minutes.",
+      "Stir in cream and garam masala; mix well and remove from heat.",
+      "Serve hot with naan or rice."
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Chana Masala",
+    "category": "Main Course",
+    "image": "https://i.ibb.co/XbJrPbb/Chana-Masala.jpg",
+    "description": "A hearty and flavorful chickpea curry cooked with tomatoes, onions, and a blend of spices, popular in Pakistani cuisine.",
+    "ingredients": [
+      "2 cups chickpeas, soaked overnight and boiled",
+      "1 large onion, finely chopped",
+      "2 tomatoes, chopped",
+      "2 green chilies, chopped",
+      "2 tbsp ginger garlic paste",
+      "1 tsp cumin seeds",
+      "1 tsp coriander powder",
+      "1 tsp garam masala",
+      "1/2 tsp turmeric powder",
+      "1/2 tsp red chili powder",
+      "Salt, to taste",
+      "Fresh cilantro, chopped",
+      "Lemon wedges, for serving",
+      "Oil, for cooking"
+    ],
+    "steps": [
+      "Heat oil in a pan; add cumin seeds and let them splutter.",
+      "Add finely chopped onion; sauté until golden brown.",
+      "Add ginger garlic paste; cook until raw smell disappears.",
+      "Incorporate chopped tomatoes; cook until they soften and oil separates.",
+      "Add turmeric powder, red chili powder, coriander powder, and salt; mix well.",
+      "Add boiled chickpeas; stir to coat with the spice mixture.",
+      "Pour in a cup of water; bring to a boil, then simmer for 10-15 minutes to allow flavors to meld.",
+      "Add garam masala and chopped green chilies; cook for an additional 2-3 minutes.",
+      "Garnish with fresh cilantro and serve hot with naan or rice, accompanied by lemon wedges."
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Mutton Biryani",
+    "category": "Main Course",
+    "image": "https://i.ibb.co/xYtnGwD/Mutton-Biryani.jpg",
+    "description": "A fragrant rice dish layered with tender mutton pieces cooked in a blend of spices, offering a rich and aromatic experience.",
+    "ingredients": [
+      "2 cups basmati rice, soaked for 30 minutes",
+      "1 kg mutton, cut into pieces",
+      "2 large onions, thinly sliced",
+      "2 tomatoes, chopped",
+      "1 cup yogurt",
+      "2 tbsp ginger garlic paste",
+      "1/2 cup oil or ghee",
+      "Spices: 2 tsp biryani masala, 1 tsp red chili powder, 1/2 tsp turmeric powder, 1 tsp cumin seeds, 4-5 green cardamom pods, 4-5 cloves, 1-inch cinnamon stick, 2 bay leaves",
+      "Fresh herbs: chopped mint and cilantro",
+      "Saffron strands soaked in warm milk",
+      "Salt, to taste"
+    ],
+    "steps": [
+      "Heat oil or ghee in a large pot; add cumin seeds, cardamom pods, cloves, cinnamon stick, and bay leaves; sauté until fragrant.",
+      "Add sliced onions; cook until golden brown.",
+      "Add ginger garlic paste; sauté for a minute.",
+      "Add mutton pieces; cook until browned on all sides.",
+      "Add chopped tomatoes, yogurt, biryani masala, red chili powder, turmeric powder, and salt; cook until oil separates and mutton is tender.",
+      "In a separate pot, boil soaked rice with salt until 70% cooked; drain and set aside.",
+      "Layer the partially cooked rice over the mutton curry; sprinkle chopped mint, cilantro, and saffron milk over the rice.",
+      "Cover the pot with a tight-fitting lid; cook on low heat (dum) for 20-25 minutes.",
+      "Gently mix before serving hot with raita."
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Chicken Biryani",
+    "category": "Main Course",
+    "image": "https://i.ibb.co/W23KXBf/Chicken-Biryani.jpg",
+    "description": "A fragrant and flavorful rice dish layered with spiced chicken, basmati rice, and aromatic herbs, a staple in Pakistani cuisine.",
+    "ingredients": [
+      "2 cups basmati rice, soaked for 30 minutes",
+      "1 kg chicken, cut into pieces",
+      "2 large onions, thinly sliced",
+      "2 tomatoes, chopped",
+      "1 cup yogurt",
+      "2 tbsp ginger garlic paste",
+      "1/2 cup oil or ghee",
+      "Spices: 2 tsp biryani masala, 1 tsp red chili powder, 1/2 tsp turmeric powder, 1 tsp cumin seeds, 4-5 green cardamom pods, 4-5 cloves, 1-inch cinnamon stick, 2 bay leaves",
+      "Fresh herbs: chopped mint and cilantro",
+      "Saffron strands soaked in warm milk",
+      "Salt, to taste"
+    ],
+    "steps": [
+      "Heat oil or ghee in a large pot; add cumin seeds, cardamom pods, cloves, cinnamon stick, and bay leaves; sauté until fragrant.",
+      "Add sliced onions; cook until golden brown.",
+      "Add ginger garlic paste; sauté for a minute.",
+      "Add chicken pieces; cook until they turn white.",
+      "Add chopped tomatoes, yogurt, biryani masala, red chili powder, turmeric powder, and salt; cook until oil separates and chicken is cooked through.",
+      "In a separate pot, boil soaked rice with salt until 70% cooked; drain and set aside.",
+      "Layer the partially cooked rice over the chicken curry; sprinkle chopped mint, cilantro, and saffron milk over the rice.",
+      "Cover the pot with a tight-fitting lid; cook on low heat (dum) for 20-25 minutes.",
+      "Gently mix before serving hot with raita."
+    ]
+  },
+  {
+    "id": 14,
+    "name": "Beef Seekh Kabab",
+    "category": "Appetizer",
+    "image": "https://i.ibb.co/B4sgHjn/Beef-Seekh-Kabab.jpg",
+    "description": "Juicy and flavorful minced beef skewers seasoned with traditional spices, grilled to perfection.",
+    "ingredients": [
+      "1 kg minced beef",
+      "1 large onion, finely chopped",
+      "2 green chilies, finely chopped",
+      "2 tbsp ginger garlic paste",
+      "1/2 cup fresh cilantro, finely chopped",
+      "Spices: 2 tsp garam masala, 1 tsp red chili powder, 1 tsp cumin powder, 1 tsp coriander powder, 1/2 tsp black pepper powder",
+      "Salt, to taste",
+      "2 tbsp gram flour (besan), roasted",
+      "2 tbsp oil or ghee"
+    ],
+    "steps": [
+      "In a large bowl, combine minced beef, chopped onion, green chilies, ginger garlic paste, chopped cilantro, spices, salt, roasted gram flour, and oil; mix thoroughly until well combined.",
+      "Cover and refrigerate the mixture for at least 1 hour to allow flavors to meld.",
+      "Preheat grill or oven to medium-high heat.",
+      "Divide the mixture into equal portions; shape each portion around skewers to form elongated kababs.",
+      "Grill the kababs, turning occasionally, until fully cooked and charred on all sides.",
+      "Serve hot with naan, raita, and lemon wedges."
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Aloo Gosht",
+    "category": "Main Course",
+    "image": "https://i.ibb.co/HCkF4kQ/Aloo-Ghost.jpg",
+    "description": "A hearty meat and potato curry cooked in a rich, spiced gravy, popular in Pakistani households.",
+    "ingredients": [
+      "1 kg mutton or beef, cut into pieces",
+      "2 large potatoes, peeled and cut into chunks",
+      "2 large onions, finely sliced",
+      "2 tomatoes, chopped",
+      "2 tbsp ginger garlic paste",
+      "1/2 cup oil or ghee",
+      "Spices: 2 tsp red chili powder, 1 tsp turmeric powder, 2 tsp coriander powder, 1 tsp cumin powder, 1 tsp garam masala",
+      "Salt, to taste",
+      "Fresh cilantro, chopped, for garnish"
+    ],
+    "steps": [
+      "Heat oil or ghee in a large pot over medium heat; add sliced onions and sauté until golden brown.",
+      "Add ginger garlic paste; cook for a minute until fragrant.",
+      "Add meat pieces; cook until browned on all sides.",
+      "Add chopped tomatoes, red chili powder, turmeric powder, coriander powder, cumin powder, and salt; cook until tomatoes soften and oil separates.",
+      "Add enough water to cover the meat; bring to a boil, then reduce heat, cover, and simmer until meat is tender.",
+      "Add potato chunks; cook until potatoes are tender and the gravy reaches desired consistency.",
+      "Stir in garam masala and garnish with chopped cilantro.",
+      "Serve hot with naan or rice."
+    ]
+  },
+  {
+    "id": 16,
+    "name": "Karahi Gosht",
+    "category": "Main Course",
+    "image": "https://i.ibb.co/KxVQwpW/Karahi-Gosht.jpg",
+    "description": "A traditional Pakistani dish featuring tender beef cooked in a wok with tomatoes, green chilies, and a blend of spices, resulting in a flavorful curry.",
+    "ingredients": [
+      "1 kg beef, cut into pieces",
+      "4 large tomatoes, chopped",
+      "2 tbsp ginger garlic paste",
+      "4-5 green chilies, sliced",
+      "1 tsp red chili powder",
+      "1 tsp cumin seeds",
+      "1 tsp garam masala",
+      "Salt, to taste",
+      "Fresh cilantro, chopped",
+      "Fresh ginger, julienned",
+      "Oil, for cooking"
+    ],
+    "steps": [
+      "Heat oil in a karahi (wok) over medium heat; add cumin seeds and let them splutter.",
+      "Add ginger garlic paste; sauté until fragrant.",
+      "Add beef pieces; cook until browned on all sides.",
+      "Incorporate chopped tomatoes; cook until they soften and oil separates.",
+      "Add red chili powder and salt; mix well.",
+      "Add sliced green chilies; continue cooking until beef is fully cooked and the gravy thickens.",
+      "Sprinkle garam masala and garnish with chopped cilantro and julienned ginger.",
+      "Serve hot with naan or roti."
+    ]
+  },
+  {
+    "id": 17,
+    "name": "Rasgulla",
+    "category": "Dessert",
+    "image": "https://i.ibb.co/30sxpCP/Rasgulla.jpg",
+    "description": "Soft and spongy cheese balls soaked in light sugar syrup, a popular Bengali sweet.",
+    "ingredients": [
+      "1 liter full-fat milk",
+      "2 to 3 tablespoons lemon juice or vinegar",
+      "1 cup sugar",
+      "4 cups water",
+      "1 teaspoon rose water or cardamom powder (optional)"
+    ],
+    "steps": [
+      "Boil the milk in a heavy-bottomed pot over medium heat, stirring occasionally to prevent scorching.",
+      "Once the milk comes to a boil, reduce the heat and add lemon juice or vinegar gradually, stirring gently until the milk curdles and whey separates.",
+      "Remove from heat and strain the curdled milk through a muslin cloth or cheesecloth to collect the chenna (paneer). Rinse the chenna under cold running water to remove any acidic flavor.",
+      "Gather the cloth edges and squeeze out excess water. Hang the cloth for 30 minutes to drain further.",
+      "Transfer the chenna to a clean surface and knead with the heel of your palm for 10 minutes until smooth and non-grainy.",
+      "Divide the chenna into equal portions and roll into smooth balls, ensuring there are no cracks.",
+      "In a large pot, combine sugar and water; bring to a boil to make the sugar syrup.",
+      "Gently add the chenna balls to the boiling syrup, cover, and cook on medium heat for 15 minutes. The balls will expand in size.",
+      "After 15 minutes, add rose water or cardamom powder if desired, and continue cooking for another 5 minutes.",
+      "Remove from heat and allow the rasgullas to cool in the syrup. Refrigerate and serve chilled."
+    ]
+  },
+  {
+    "id": 18,
+    "name": "Jalebi",
+    "category": "Dessert",
+    "image": "https://i.ibb.co/gwxbdn3/Jallebi.jpg",
+    "description": "Crispy, spiral-shaped deep-fried sweets soaked in saffron-infused sugar syrup.",
+    "ingredients": [
+      "1 cup all-purpose flour (maida)",
+      "2 tablespoons cornflour",
+      "1/2 cup yogurt",
+      "A pinch of turmeric or yellow food color",
+      "1/2 teaspoon baking powder",
+      "Water, as needed",
+      "Oil or ghee, for deep frying",
+      "For sugar syrup:",
+      "1 cup sugar",
+      "1/2 cup water",
+      "A few saffron strands",
+      "1/2 teaspoon cardamom powder",
+      "1/2 teaspoon lemon juice"
+    ],
+    "steps": [
+      "In a mixing bowl, combine all-purpose flour, cornflour, yogurt, turmeric or food color, and water to make a smooth batter of pouring consistency. Cover and let it ferment for 8-10 hours or overnight.",
+      "After fermentation, add baking powder to the batter and mix gently.",
+      "Prepare the sugar syrup by boiling sugar and water until it reaches a one-string consistency. Add saffron strands, cardamom powder, and lemon juice; keep warm.",
+      "Heat oil or ghee in a flat pan over medium heat.",
+      "Pour the batter into a squeeze bottle or piping bag with a small nozzle.",
+      "Squeeze the batter into the hot oil in spiral shapes. Fry until golden and crisp on both sides.",
+      "Remove the jalebis from the oil and immediately immerse them in warm sugar syrup for a few seconds.",
+      "Drain excess syrup and serve warm."
+    ]
+  },
+  {
+    "id": 19,
+    "name": "Kaju Katli",
+    "category": "Dessert",
+    "image": "https://i.ibb.co/ctZHhN5/Kaju-Katli.jpg",
+    "description": "Thin, diamond-shaped cashew fudge, a rich and popular Indian sweet.",
+    "ingredients": [
+      "2 cups cashew nuts",
+      "1 cup sugar",
+      "1/2 cup water",
+      "1 tablespoon ghee (clarified butter)",
+      "Silver leaf (varak) for garnish (optional)"
+    ],
+    "steps": [
+      "Grind cashew nuts into a fine powder without releasing oil. Sieve if necessary to remove larger particles.",
+      "In a non-stick pan, combine sugar and water; cook over medium heat until the sugar dissolves and forms a one-string consistency syrup.",
+      "Reduce heat to low and add the cashew powder; mix well to avoid lumps.",
+      "Cook the mixture, stirring continuously, until it thickens and starts to leave the sides of the pan.",
+      "Add ghee and mix well. Continue cooking until the mixture forms a dough-like consistency.",
+      "Transfer the mixture onto a greased surface and let it cool slightly.",
+      "Knead the mixture gently while warm to make it smooth.",
+      "Roll out the dough to a 1/4-inch thickness using a greased rolling pin.",
+      "Apply silver leaf on top if desired and cut into diamond-shaped pieces.",
+      "Allow to cool completely before serving or storing in an airtight container."
+    ]
+  },
+  {
+    "id": 20,
+    "name": "Besan Ladoo",
+    "category": "Dessert",
+    "image": "https://i.ibb.co/zNg8SGs/Besan-Ladoo.jpg",
+    "description": "Sweet gram flour balls flavored with cardamom and garnished with nuts.",
+    "ingredients": [
+      "2 cups besan (gram flour)",
+      "1 cup powdered sugar",
+      "1/2 cup ghee (clarified butter)",
+      "1 teaspoon cardamom powder",
+      "Chopped nuts for garnish (optional)"
+    ],
+    "steps": [
+      "Heat ghee in a heavy-bottomed pan over low heat.",
+      "Add besan and roast on low heat, stirring continuously to prevent burning, until it turns golden brown and releases a nutty aroma.",
+      "Remove from heat and let it cool slightly.",
+      "Add powdered sugar and cardamom powder to the roasted besan; mix thoroughly.",
+      "Allow the mixture to cool enough to handle, then shape into small round balls (ladoos).",
+      "Garnish each ladoo with chopped nuts if desired.",
+      "Let them cool completely before storing in an airtight container."
+    ]
+  },
+  {
+    "id": 21,
+    "name": "Rasmalai",
+    "category": "Dessert",
+    "image": "https://i.ibb.co/J3V0Zb9/Ras-Malai.jpg",
+    "description": "A classic Indian dessert featuring soft paneer discs soaked in sweetened, cardamom-flavored milk, garnished with nuts and saffron.",
+    "ingredients": [
+      "For Paneer Discs:",
+      "1 liter full-fat milk",
+      "2 tablespoons lemon juice or vinegar",
+      "1 teaspoon all-purpose flour (optional)",
+      "For Sugar Syrup:",
+      "1 cup sugar",
+      "4 cups water",
+      "For Flavored Milk (Ras):",
+      "1 liter full-fat milk",
+      "1/2 cup sugar (adjust to taste)",
+      "1/2 teaspoon cardamom powder",
+      "A few saffron strands",
+      "2 tablespoons chopped pistachios and almonds"
+    ],
+    "steps": [
+      "Prepare Paneer (Chenna):",
+      "Boil 1 liter of milk in a heavy-bottomed pan. Once it comes to a boil, reduce heat and add lemon juice or vinegar gradually, stirring gently until the milk curdles and whey separates.",
+      "Remove from heat and strain through a muslin cloth to collect the chenna (paneer). Rinse under cold water to remove any acidic taste.",
+      "Squeeze out excess water and hang the cloth for 30 minutes to drain further.",
+      "Knead the chenna on a flat surface for 5-7 minutes until smooth and grain-free. Optionally, mix in 1 teaspoon of all-purpose flour to bind.",
+      "Divide the chenna into equal portions and shape into small, flat discs; set aside.",
+      "Prepare Sugar Syrup:",
+      "In a wide pan, combine 1 cup sugar and 4 cups water; bring to a boil, ensuring the sugar dissolves completely.",
+      "Gently add the chenna discs into the boiling syrup. Cover and cook on medium heat for 15 minutes, allowing them to expand. Turn off the heat and let them cool in the syrup.",
+      "Prepare Flavored Milk (Ras):",
+      "In another pan, boil 1 liter of milk. Reduce heat and simmer until it reduces slightly, stirring occasionally to prevent sticking.",
+      "Add 1/2 cup sugar, cardamom powder, and saffron strands; mix well and continue to simmer for a few more minutes. Remove from heat and let it cool to room temperature.",
+      "Assemble Rasmalai:",
+      "Gently squeeze the cooled chenna discs to remove excess sugar syrup and place them into the prepared flavored milk.",
+      "Refrigerate for a few hours to allow the flavors to meld.",
+      "Garnish with chopped pistachios and almonds before serving chilled."
+    ]
+  },
+  {
+    "id": 22,
+    "name": "Gulab Jamun",
+    "category": "Dessert",
+    "image": "https://i.ibb.co/QbP3cSC/download.jpg",
+    "description": "Soft, deep-fried milk-based dumplings soaked in a fragrant sugar syrup, a classic Indian dessert.",
+    "ingredients": [
+      "1 cup milk powder",
+      "1/4 cup all-purpose flour",
+      "1/8 teaspoon baking soda",
+      "2 tablespoons ghee (clarified butter)",
+      "1/4 cup milk (adjust as needed)",
+      "Oil or ghee for deep frying",
+      "For sugar syrup:",
+      "1.5 cups sugar",
+      "1.5 cups water",
+      "4 green cardamom pods, crushed",
+      "1 teaspoon rose water (optional)"
+    ],
+    "steps": [
+      "In a mixing bowl, combine milk powder, all-purpose flour, and baking soda; mix well.",
+      "Add ghee and mix until the mixture becomes crumbly.",
+      "Gradually add milk and gently mix to form a soft, smooth dough. Avoid over-mixing.",
+      "Divide the dough into equal portions and roll into smooth balls without cracks; set aside.",
+      "In a deep pan, heat oil or ghee over low to medium heat for deep frying.",
+      "Meanwhile, prepare the sugar syrup by combining sugar, water, and crushed cardamom pods in a pot; bring to a boil, then simmer for 5-6 minutes until slightly sticky. Add rose water if desired; keep warm.",
+      "Test the oil temperature by dropping a small piece of dough; it should rise slowly without browning quickly.",
+      "Gently slide the dough balls into the oil, frying in batches. Stir gently to ensure even cooking.",
+      "Fry until the gulab jamuns turn golden brown; remove with a slotted spoon and drain excess oil.",
+      "Immediately immerse the fried gulab jamuns into the warm sugar syrup. Let them soak for at least 2 hours before serving to absorb the syrup fully."
+    ]
+  },
+  {
+    "id": 23,
+    "name": "Sandesh",
+    "category": "Dessert",
+    "image": "https://i.ibb.co/42QyNc3/Sandesh.jpg",
+    "description": "A Bengali delicacy made from fresh paneer, sweetened and flavored, often garnished with pistachios or saffron.",
+    "ingredients": [
+      "1 liter full-fat milk",
+      "2-3 tablespoons lemon juice or vinegar",
+      "1/4 cup powdered sugar (adjust to taste)",
+      "1/2 teaspoon cardamom powder",
+      "Saffron strands or chopped pistachios for garnish (optional)"
+    ],
+    "steps": [
+      "Boil the milk in a heavy-bottomed pan over medium heat, stirring occasionally.",
+      "Once it comes to a boil, reduce heat and add lemon juice or vinegar gradually, stirring gently until the milk curdles and whey separates.",
+      "Remove from heat and strain through a muslin cloth to collect the chenna (paneer). Rinse under cold water to remove any acidic taste.",
+      "Squeeze out excess water and hang the cloth for 30 minutes to drain further.",
+      "Transfer the chenna to a plate and knead for 5-7 minutes until smooth and grain-free.",
+      "In a non-stick pan, cook the kneaded chenna over low heat for 4-5 minutes, stirring continuously, until it becomes slightly dry but remains moist.",
+      "Remove from heat and mix in powdered sugar and cardamom powder; knead again to incorporate.",
+      "Shape the mixture into small, flat rounds or desired shapes.",
+      "Garnish with saffron strands or chopped pistachios if desired.",
+      "Refrigerate for 1-2 hours before serving chilled."
+    ]
+  },
+  {
+    "id": 24,
+    "name": "Mysore Pak",
+    "category": "Dessert",
+    "image": "https://i.ibb.co/jrNBn9V/Mysore-Pak.jpgg",
+    "description": "A rich South Indian sweet made from gram flour, ghee, and sugar, known for its crumbly texture.",
+    "ingredients": [
+      "1 cup besan (gram flour)",
+      "1 cup ghee (clarified butter), melted",
+      "1 cup sugar",
+      "1/2 cup water"
+    ],
+    "steps": [
+      "Sift the besan to remove lumps; set aside.",
+      "Grease a plate or tray with ghee and keep ready for setting the Mysore Pak.",
+      "In a heavy-bottomed pan, combine sugar and water; bring to a boil, stirring to dissolve the sugar.",
+      "Continue boiling until the syrup reaches a one-string consistency.",
+      "Reduce heat to low and gradually add the sifted besan, stirring continuously to prevent lumps.",
+      "Once the besan is well incorporated, start adding melted ghee in small batches, stirring continuously.",
+      "Keep cooking and adding ghee until the mixture starts to leave the sides of the pan and becomes frothy.",
+      "Pour the mixture immediately onto the greased plate and spread evenly.",
+      "Allow it to cool slightly and cut into desired shapes while still warm.",
+      "Let it cool completely before separating the pieces and serving."
+    ]
+  },
+  {
+    "id": 25,
+    "name": "Peda",
+    "category": "Dessert",
+    "image": "https://i.ibb.co/vssXHhg/Peda.jpg",
+    "description": "Soft, sweetened milk fudge flavored with cardamom, often garnished with nuts.",
+    "ingredients": [
+      "2 cups khoya (mawa), grated",
+      "1 cup powdered sugar",
+      "1/2 teaspoon cardamom powder",
+      "Chopped pistachios or almonds for garnish"
+    ],
+    "steps": [
+      "In a non-stick pan, cook the grated khoya over medium heat, stirring continuously to prevent sticking.",
+      "Once the khoya softens and becomes smooth, add powdered sugar and mix well.",
+      "Continue cooking, stirring continuously, until the mixture thickens and starts to leave the sides of the pan.",
+      "Add cardamom powder and mix thoroughly.",
+      "Remove from heat and let the mixture cool slightly.",
+      "While still warm, divide the mixture into equal portions and shape into small, flat discs (pedas).",
+      "Garnish each peda with chopped pistachios or almonds.",
+      "Allow them to cool completely before serving or storing in an airtight container."
+    ]
+  },
+  {
+    "id": 26,
+    "name": "Kheer",
+    "category": "Dessert",
+    "image": "https://i.ibb.co/R0KdBjC/Kheer.jpg",
+    "description": "A creamy Indian rice pudding made by simmering rice and milk, flavored with cardamom and garnished with nuts and saffron.",
+    "ingredients": [
+      "1/4 cup basmati rice",
+      "1 liter whole milk (4 cups)",
+      "6 tablespoons sugar (adjust to taste)",
+      "1/2 teaspoon cardamom powder",
+      "A pinch of saffron strands",
+      "1 tablespoon chopped almonds",
+      "1 tablespoon chopped cashews",
+      "1 tablespoon chopped pistachios",
+      "1 tablespoon golden raisins"
+    ],
+    "steps": [
+      "Rinse 1/4 cup basmati rice under running water until the water runs clear. Soak the rice in water for 30 minutes, then drain.",
+      "In a heavy-bottomed pan, bring 1 liter of whole milk to a boil over medium heat, stirring occasionally to prevent it from sticking to the bottom.",
+      "Once the milk comes to a boil, reduce the heat to low and add the drained rice. Cook, stirring frequently, to prevent the rice from sticking to the bottom of the pan.",
+      "Simmer the mixture until the rice is fully cooked and the milk has thickened to a creamy consistency. This may take about 25-30 minutes. Stir often to ensure even cooking and to prevent the milk from scorching.",
+      "Add 6 tablespoons of sugar, adjusting to taste, and stir until it dissolves completely.",
+      "Sprinkle in 1/2 teaspoon of cardamom powder and a pinch of saffron strands. Mix well to incorporate the flavors.",
+      "Add the chopped almonds, cashews, pistachios, and golden raisins. Stir to distribute the nuts and raisins evenly throughout the kheer.",
+      "Continue to simmer for an additional 5 minutes, allowing the flavors to meld together.",
+      "Remove the pan from heat and let the kheer cool. It will thicken further as it cools.",
+      "Serve the kheer warm or chilled, garnished with additional nuts or saffron strands if desired."
+    ]
+  }
+  
+]
