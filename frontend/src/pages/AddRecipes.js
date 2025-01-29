@@ -62,20 +62,24 @@ export default function AddRecipe() {
       setError("All fields are required, including ingredients and steps!");
       return;
     }
-    try{
-      const res=await axios.post('http://localhost:5000/api/recipes',formData);
-      alert('data inserted succesfully');
-    }catch(err){
-      alert('Error while inserting data');
-    }
+
     // Create new recipe object
     const newRecipe = {
-      id: recipes.length + 1,
       ...formData,
       ingredients,
       steps,
     };
 
+    try {
+      const res = await axios.post('http://localhost:5000/api/recipes', newRecipe);
+      alert('Data inserted successfully');
+      // Update recipes context
+      setRecipes([...recipes, res.data]);
+      // Navigate back to the recipe list
+      navigate("/recipes");
+    } catch (err) {
+      alert('Error while inserting data');
+    }
   };
 
   return (

@@ -43,12 +43,12 @@ export default function Navbar() {
           </li>
           <li>
             <NavLink
-              to="/about"
+              to="/contact"
               className={({ isActive }) =>
                 isActive ? "font-bold underline" : "hover:underline"
               }
             >
-              About Us
+              Contact Us
             </NavLink>
           </li>
         </ul>
@@ -103,13 +103,13 @@ export default function Navbar() {
           </li>
           <li className="p-4 border-t border-blue-400">
             <NavLink
-              to="/about"
+              to="/contact"
               className={({ isActive }) =>
                 isActive ? "font-bold underline" : "hover:underline"
               }
               onClick={() => setIsOpen(false)}
             >
-              About Us
+              Contact Us
             </NavLink>
           </li>
         </ul>

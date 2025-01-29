@@ -1,16 +1,21 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import RecipeCard from "../components/RecipeCard";
 import { RecipeContext } from "../context/RecipeContext";
 import SearchBar from "../components/searchbar";
 
 export default function RecipeList() {
-  const {filteredRecipes, searchQuery, setSearchQuery } =
+  const { filteredRecipes, searchQuery, setSearchQuery } =
     useContext(RecipeContext);
 
   const [currentPage, setCurrentPage] = useState(1);
   const recipesPerPage = 9;
 
-  //paginaton logic
+  // Reset current page to 1 when search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  // Pagination logic
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
   const currentRecipe = filteredRecipes.slice(
@@ -18,21 +23,21 @@ export default function RecipeList() {
     indexOfLastRecipe
   );
   const totalPages = Math.ceil(filteredRecipes.length / recipesPerPage);
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-center">
-      <SearchBar
-        placeholder="Search recipe by name or catageory..."
-        onChange={setSearchQuery}
-        value={searchQuery}
-      />
-      </div>
-      
+      {/* <div className="flex justify-center">
+        <SearchBar
+          placeholder="Search recipe by name or category..."
+          onChange={setSearchQuery}
+          value={searchQuery}
+        />
+      </div> */}
 
       {/* Recipe Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-10">
         {currentRecipe.length > 0 ? (
-          currentRecipe.map((recipe,index) => (
+          currentRecipe.map((recipe, index) => (
             <RecipeCard key={index} recipe={recipe} />
           ))
         ) : (

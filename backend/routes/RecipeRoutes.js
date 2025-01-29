@@ -13,23 +13,38 @@ router.get('/',async(req,res)=>{
     }
 });
 
+// Fetch a recipe by ID : get
+router.get('/:id', async (req, res) => {
+  try {
+    const recipe = await Recipe.findOne({ id: req.params.id });
+    if (!recipe) return res.status(404).json({ message: "Recipe not found" });
+    res.json(recipe);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 //add a new recipe : post
-router.post("/",async(req,res)=>{
-    const{name, category, description, image, ingredients, steps}=req.body;
-    const newRecipe=new Recipe({
-        name,
-        category,
-        description,
-        image,
-        ingredients,
-        steps,
+router.post("/", async (req, res) => {
+  const { name, category, description, image, ingredients, steps } = req.body;
+  
+  try {
+    const recipeCount = await Recipe.countDocuments();
+    const newRecipe = new Recipe({
+      id: (100 + recipeCount) + 1,
+      name,
+      category,
+      description,
+      image,
+      ingredients,
+      steps,
     });
-    try{
-    const savedRecipe=await newRecipe.save();
+
+    const savedRecipe = await newRecipe.save();
     res.status(201).json(savedRecipe);
-    }catch(err){
-        res.status(400).json({message:err.message});
-    }
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 });
 
 // DELETE: Remove a recipe by ID

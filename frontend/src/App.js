@@ -5,6 +5,10 @@ import RecipeList from "./pages/RecipeList";
 import { RecipeProvider } from "./context/RecipeContext";
 import RecipeDetails from "./components/RecipeDetail";
 import AddRecipes from "./pages/AddRecipes";
+import SearchBar from "./components/searchbar";
+import Footer from "./components/Footer";
+import ContactUs from "./pages/ContactUs";
+
 export default function App() {
   return (
     <RecipeProvider>
@@ -24,17 +28,18 @@ export default function App() {
             path="/recipes"
             element={
               <>
+                <div className="mt-5 flex justify-center">
+                  <SearchBar />
+                </div>
                 <RecipeList />
               </>
             }
           />
           <Route path="/recipes/:id" element={<RecipeDetails />} />
-          <Route
-            path="/add-recipe"
-            element={<AddRecipes/>}
-          />
-          <Route path="/about" element={<h1>Welcome to about Us Page</h1>} />
+          <Route path="/add-recipe" element={<AddRecipes />} />
+          <Route path="/contact" element={<ContactUs />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </RecipeProvider>
   );
