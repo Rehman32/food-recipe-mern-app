@@ -3,7 +3,7 @@ const dotenv=require('dotenv');
 const mongoose=require('mongoose');
 const cors=require('cors');
 const recipeRoutes = require("./routes/RecipeRoutes");
-
+const contactRoutes=require('./routes/contactRoutes')
 dotenv.config();
 
 const app=express();
@@ -13,6 +13,7 @@ const port=process.env.PORT || 5000;
 app.use(express.json());    //parse json data   
 app.use(cors())  //allow cross origin request
 app.use("/api/recipes", recipeRoutes);
+app.use('/contact',contactRoutes);
 
 //connect to mongodb
 mongoose

@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
     <section className="relative h-[80vh] w-full overflow-hidden">
-      <div className=" absolute inset-0 flex border p-3 bg-white">
+      <div className=" absolute inset-0 flex border  bg-white">
         {/* Image 1 */}
 
         <div

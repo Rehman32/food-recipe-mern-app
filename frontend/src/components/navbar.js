@@ -4,7 +4,7 @@ import { Link, NavLink } from "react-router-dom";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <nav className="bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-300">
+    <nav className="bg-blue-500 text-white   transition duration-300">
       <div className="container mx-auto flex items-center justify-between p-4">
         <div className="text-xl font-bold">
           <Link to="/">Recipe Generator</Link>

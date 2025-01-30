@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { RecipeContext } from "../context/RecipeContext";
 import axios from "axios";
+
 export default function AddRecipe() {
   const { recipes, setRecipes } = useContext(RecipeContext);
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ export default function AddRecipe() {
   const [ingredients, setIngredients] = useState([""]); // Array for dynamic ingredients
   const [steps, setSteps] = useState([""]); // Array for dynamic steps
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -71,29 +73,37 @@ export default function AddRecipe() {
     };
 
     try {
-      const res = await axios.post('http://localhost:5000/api/recipes', newRecipe);
-      alert('Data inserted successfully');
+      const res = await axios.post(
+        "http://localhost:5000/api/recipes",
+        newRecipe
+      );
+      setSuccess("Data inserted successfully");
       // Update recipes context
       setRecipes([...recipes, res.data]);
       // Navigate back to the recipe list
       navigate("/recipes");
     } catch (err) {
-      alert('Error while inserting data');
+      setError("Error while inserting data");
     }
   };
+  setTimeout(() => {
+    setError("");
+    setSuccess("");
+  }, 3000);
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6 text-center">Add New Recipe</h1>
 
-      {error && (
-        <div className="bg-red-100 text-red-700 p-4 rounded mb-4">{error}</div>
-      )}
-
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-md rounded-lg p-6"
+      >
         {/* Basic Fields */}
         <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2">Recipe Name</label>
+          <label className="block text-gray-700 font-bold mb-2">
+            Recipe Name
+          </label>
           <input
             type="text"
             name="name"
@@ -115,7 +125,9 @@ export default function AddRecipe() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2">Description</label>
+          <label className="block text-gray-700 font-bold mb-2">
+            Description
+          </label>
           <textarea
             name="description"
             value={formData.description}
@@ -126,7 +138,9 @@ export default function AddRecipe() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2">Image URL</label>
+          <label className="block text-gray-700 font-bold mb-2">
+            Image URL
+          </label>
           <input
             type="text"
             name="image"
@@ -138,7 +152,9 @@ export default function AddRecipe() {
 
         {/* Dynamic Ingredients */}
         <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2">Ingredients</label>
+          <label className="block text-gray-700 font-bold mb-2">
+            Ingredients
+          </label>
           {ingredients.map((ingredient, index) => (
             <div key={index} className="flex items-center mb-2">
               <input
@@ -193,7 +209,16 @@ export default function AddRecipe() {
             Add Step
           </button>
         </div>
-
+        {error && (
+          <div className="absolute overflow-hidden bg-red-500 text-red-200 p-4 rounded w-1/2 ml-80  mt-16 transition ">
+            {error}
+          </div>
+        )}
+        {success && (
+          <div className="absolute bg-green-500 text-white p-4 rounded w-1/2 ml-80 ">
+            {success}
+          </div>
+        )}
         <button
           type="submit"
           className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
