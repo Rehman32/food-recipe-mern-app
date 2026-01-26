@@ -18,6 +18,8 @@ import {
 import { recipeApi } from '../services/api';
 import { useAuthStore } from '../stores/authStore';
 import { Button } from '../components/ui/Button';
+import ReviewSection from '../components/recipe/ReviewSection';
+import NutritionOverview from '../components/recipe/NutritionOverview';
 import { cn, formatTime } from '../utils/helpers';
 import { Recipe, Ingredient, Instruction } from '../types';
 
@@ -335,6 +337,9 @@ const RecipeDetailPage: React.FC = () => {
                                 </div>
                             </div>
                         </div>
+
+                        {/* Reviews Section */}
+                        <ReviewSection recipeId={recipe._id} />
                     </div>
 
                     {/* Sidebar - Ingredients */}
@@ -406,6 +411,13 @@ const RecipeDetailPage: React.FC = () => {
                                                 </span>
                                             ))}
                                         </div>
+                                    </div>
+                                )}
+
+                                {/* Nutrition overview */}
+                                {recipe.nutrition && (
+                                    <div className="mt-6 pt-6 border-t border-surface-100 dark:border-surface-700">
+                                        <NutritionOverview nutrition={recipe.nutrition} servings={recipe.servings} />
                                     </div>
                                 )}
 

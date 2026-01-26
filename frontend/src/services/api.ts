@@ -7,7 +7,9 @@ import {
   RegisterCredentials,
   User,
   Recipe,
+  Review,
   Collection,
+  Notification,
   PaginatedResponse,
   RecipeFilters
 } from '../types';
@@ -220,4 +222,94 @@ export const collectionApi = {
   },
 };
 
+// Review API
+export const reviewApi = {
+  getForRecipe: async (recipeId: string, params?: { page?: number; limit?: number; sort?: string }): Promise<ApiResponse<any>> => {
+    const response = await api.get<ApiResponse<any>>(`/reviews/recipe/${recipeId}`, { params });
+    return response.data;
+  },
+  
+  create: async (data: { recipeId: string; rating: number; title?: string; text: string }): Promise<ApiResponse<{ review: Review }>> => {
+    const response = await api.post<ApiResponse<{ review: Review }>>('/reviews', data);
+    return response.data;
+  },
+  
+  update: async (id: string, data: Partial<Review>): Promise<ApiResponse<{ review: Review }>> => {
+    const response = await api.put<ApiResponse<{ review: Review }>>(`/reviews/${id}`, data);
+    return response.data;
+  },
+  
+  delete: async (id: string): Promise<ApiResponse> => {
+    const response = await api.delete<ApiResponse>(`/reviews/${id}`);
+    return response.data;
+  },
+  
+  helpful: async (id: string): Promise<ApiResponse> => {
+    const response = await api.post<ApiResponse>(`/reviews/${id}/helpful`);
+    return response.data;
+  },
+};
+
+// Notification API
+export const notificationApi = {
+  getAll: async (params?: { page?: number; limit?: number }): Promise<ApiResponse<any>> => {
+    const response = await api.get<ApiResponse<any>>('/notifications', { params });
+    return response.data;
+  },
+  
+  getUnreadCount: async (): Promise<ApiResponse<{ count: number }>> => {
+    const response = await api.get<ApiResponse<{ count: number }>>('/notifications/unread-count');
+    return response.data;
+  },
+  
+  markRead: async (id: string): Promise<ApiResponse> => {
+    const response = await api.put<ApiResponse>(`/notifications/${id}/read`);
+    return response.data;
+  },
+  
+  markAllRead: async (): Promise<ApiResponse> => {
+    const response = await api.put<ApiResponse>('/notifications/read-all');
+    return response.data;
+  },
+};
+
+// Meal Plan API
+export const mealPlanApi = {
+  getAll: async (): Promise<ApiResponse<any>> => {
+    const response = await api.get<ApiResponse<any>>('/meal-plans');
+    return response.data;
+  },
+
+  getCurrent: async (): Promise<ApiResponse<any>> => {
+    const response = await api.get<ApiResponse<any>>('/meal-plans/current');
+    return response.data;
+  },
+
+  getById: async (id: string): Promise<ApiResponse<any>> => {
+    const response = await api.get<ApiResponse<any>>(`/meal-plans/${id}`);
+    return response.data;
+  },
+
+  create: async (data: { name?: string; startDate: string; endDate: string; notes?: string }): Promise<ApiResponse<any>> => {
+    const response = await api.post<ApiResponse<any>>('/meal-plans', data);
+    return response.data;
+  },
+
+  updateDay: async (id: string, data: { date: string; mealType: string; recipeId?: string; servings?: number }): Promise<ApiResponse<any>> => {
+    const response = await api.put<ApiResponse<any>>(`/meal-plans/${id}/day`, data);
+    return response.data;
+  },
+
+  getShoppingList: async (id: string): Promise<ApiResponse<any>> => {
+    const response = await api.get<ApiResponse<any>>(`/meal-plans/${id}/shopping-list`);
+    return response.data;
+  },
+
+  delete: async (id: string): Promise<ApiResponse> => {
+    const response = await api.delete<ApiResponse>(`/meal-plans/${id}`);
+    return response.data;
+  },
+};
+
 export default api;
+

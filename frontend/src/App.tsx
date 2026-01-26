@@ -20,6 +20,14 @@ import ProfilePage from './pages/ProfilePage';
 import CollectionsPage from './pages/CollectionsPage';
 import CollectionDetailPage from './pages/CollectionDetailPage';
 
+// New pages (Sprint 4)
+import NotificationsPage from './pages/NotificationsPage';
+import ActivityFeedPage from './pages/ActivityFeedPage';
+
+// New pages (Sprint 5)
+import MealPlannerPage from './pages/MealPlannerPage';
+import ShoppingListPage from './pages/ShoppingListPage';
+
 // Auth callback page for Google OAuth
 const AuthCallback: React.FC = () => {
     useEffect(() => {
@@ -74,6 +82,12 @@ const App: React.FC = () => {
                         <Route path="/profile/:username" element={<ProfilePage />} />
                         <Route path="/collections" element={<CollectionsPage />} />
                         <Route path="/collections/:id" element={<CollectionDetailPage />} />
+                        {/* Social & engagement (Sprint 4) */}
+                        <Route path="/notifications" element={<NotificationsPage />} />
+                        <Route path="/feed" element={<ActivityFeedPage />} />
+                        {/* Meal planning (Sprint 5) */}
+                        <Route path="/meal-planner" element={<MealPlannerPage />} />
+                        <Route path="/shopping-list/:id" element={<ShoppingListPage />} />
                         {/* Legacy routes */}
                         <Route path="/add-recipe" element={<AddRecipes />} />
                         <Route path="/contact" element={<ContactUs />} />

@@ -143,6 +143,20 @@ export interface Collection {
   recipes: Recipe[] | string[];
   isPublic: boolean;
   isDefault: boolean;
+  recipeCount?: number;
+  createdAt: string;
+}
+
+// Notification types
+export interface Notification {
+  _id: string;
+  recipient: string;
+  sender: User;
+  type: 'new_review' | 'new_follower' | 'recipe_liked' | 'recipe_saved' | 'made_it';
+  recipe?: { _id: string; title: string; slug: string };
+  review?: string;
+  message: string;
+  read: boolean;
   createdAt: string;
 }
 

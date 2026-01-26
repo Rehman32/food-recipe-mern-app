@@ -17,6 +17,8 @@ import userRoutes from './routes/users';
 import recipeRoutes from './routes/recipes';
 import reviewRoutes from './routes/reviews';
 import collectionRoutes from './routes/collections';
+import notificationRoutes from './routes/notifications';
+import mealPlanRoutes from './routes/mealPlans';
 
 // Initialize express app
 const app = express();
@@ -64,6 +66,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/collections', collectionRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/meal-plans', mealPlanRoutes);
 
 // Root route
 app.get('/', (req: Request, res: Response) => {
