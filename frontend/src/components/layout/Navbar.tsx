@@ -5,12 +5,12 @@ import {
     X,
     ChefHat,
     Search,
-    Plus,
     User,
     LogOut,
-    Heart,
-    BookOpen,
-    Settings
+    Bell,
+    CalendarDays,
+    Sparkles,
+    FolderOpen,
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { ThemeToggle } from '../ui/ThemeToggle';
@@ -31,8 +31,10 @@ const Navbar: React.FC = () => {
     const navLinks = [
         { to: '/', label: 'Home' },
         { to: '/recipes', label: 'Recipes' },
+        { to: '/feed', label: 'Feed' },
+        { to: '/ai-suggestions', label: 'AI Chef', icon: Sparkles },
+        { to: '/meal-planner', label: 'Meal Plan', requiresAuth: true },
         { to: '/add-recipe', label: 'Add Recipe', requiresAuth: true },
-        { to: '/contact', label: 'Contact' },
     ];
 
     const openAuth = (mode: 'login' | 'register') => {
@@ -89,9 +91,22 @@ const Navbar: React.FC = () => {
                         {/* Right Side Actions */}
                         <div className="flex items-center gap-3">
                             {/* Search Button */}
-                            <button className="p-2 rounded-lg text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors">
+                            <button
+                                onClick={() => navigate('/search')}
+                                className="p-2 rounded-lg text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors"
+                            >
                                 <Search className="w-5 h-5" />
                             </button>
+
+                            {/* Notifications */}
+                            {isAuthenticated && (
+                                <button
+                                    onClick={() => navigate('/notifications')}
+                                    className="p-2 rounded-lg text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors"
+                                >
+                                    <Bell className="w-5 h-5" />
+                                </button>
+                            )}
 
                             {/* Theme Toggle */}
                             <div className="hidden sm:block">
@@ -135,28 +150,28 @@ const Navbar: React.FC = () => {
                                                     My Profile
                                                 </Link>
                                                 <Link
-                                                    to="/my-recipes"
+                                                    to="/collections"
                                                     className="flex items-center gap-3 px-4 py-2.5 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-700"
                                                     onClick={() => setIsProfileDropdownOpen(false)}
                                                 >
-                                                    <BookOpen className="w-4 h-4" />
-                                                    My Recipes
+                                                    <FolderOpen className="w-4 h-4" />
+                                                    My Collections
                                                 </Link>
                                                 <Link
-                                                    to="/saved"
+                                                    to="/meal-planner"
                                                     className="flex items-center gap-3 px-4 py-2.5 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-700"
                                                     onClick={() => setIsProfileDropdownOpen(false)}
                                                 >
-                                                    <Heart className="w-4 h-4" />
-                                                    Saved Recipes
+                                                    <CalendarDays className="w-4 h-4" />
+                                                    Meal Planner
                                                 </Link>
                                                 <Link
-                                                    to="/settings"
+                                                    to="/notifications"
                                                     className="flex items-center gap-3 px-4 py-2.5 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-700"
                                                     onClick={() => setIsProfileDropdownOpen(false)}
                                                 >
-                                                    <Settings className="w-4 h-4" />
-                                                    Settings
+                                                    <Bell className="w-4 h-4" />
+                                                    Notifications
                                                 </Link>
 
                                                 <div className="border-t border-surface-200 dark:border-surface-700 mt-2 pt-2">

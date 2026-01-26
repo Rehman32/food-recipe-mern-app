@@ -8,6 +8,9 @@ const Footer: React.FC = () => {
     const footerLinks = {
         product: [
             { label: 'Browse Recipes', to: '/recipes' },
+            { label: 'AI Suggestions', to: '/ai-suggestions' },
+            { label: 'Smart Search', to: '/search' },
+            { label: 'Activity Feed', to: '/feed' },
             { label: 'Add Recipe', to: '/add-recipe' },
             { label: 'Meal Planner', to: '/meal-planner' },
             { label: 'Collections', to: '/collections' },

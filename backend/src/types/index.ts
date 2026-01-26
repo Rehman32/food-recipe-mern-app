@@ -1,11 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
 import { IUser } from '../models/User';
+import mongoose from 'mongoose';
 
 // Extend Express Request to include user
 declare global {
   namespace Express {
+    interface User {
+      _id: mongoose.Types.ObjectId;
+      role?: string;
+      [key: string]: any;
+    }
     interface Request {
-      user?: IUser;
+      user?: User;
     }
   }
 }

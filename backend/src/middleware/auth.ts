@@ -3,14 +3,7 @@ import jwt from 'jsonwebtoken';
 import User, { IUser } from '../models/User';
 import { JwtPayload, ApiResponse } from '../types';
 
-// Extend Request to include user
-declare global {
-  namespace Express {
-    interface Request {
-      user?: IUser;
-    }
-  }
-}
+// Express.Request.user type is declared in ../types/index.ts
 
 /**
  * Middleware to protect routes - requires valid JWT token
@@ -58,7 +51,7 @@ export const protect = async (
     await user.save({ validateBeforeSave: false });
 
     // Attach user to request
-    req.user = user;
+    req.user = user as any;
     next();
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
@@ -108,7 +101,7 @@ export const optionalAuth = async (
       const user = await User.findById(decoded.userId).select('-password -refreshToken');
       
       if (user) {
-        req.user = user;
+        req.user = user as any;
       }
     }
 
@@ -132,7 +125,7 @@ export const authorize = (...roles: string[]) => {
       return;
     }
 
-    if (!roles.includes(req.user.role)) {
+    if (!roles.includes(req.user.role || '')) {
       res.status(403).json({
         success: false,
         error: 'Not authorized to access this resource',
@@ -157,13 +150,13 @@ export const generateTokens = (user: IUser): { accessToken: string; refreshToken
   const accessToken = jwt.sign(
     payload,
     process.env.JWT_ACCESS_SECRET || 'fallback-secret',
-    { expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || '15m' }
+    { expiresIn: (process.env.JWT_ACCESS_EXPIRES_IN || '15m') as string }
   );
 
   const refreshToken = jwt.sign(
     payload,
     process.env.JWT_REFRESH_SECRET || 'fallback-refresh-secret',
-    { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d' }
+    { expiresIn: (process.env.JWT_REFRESH_EXPIRES_IN || '7d') as string }
   );
 
   return { accessToken, refreshToken };

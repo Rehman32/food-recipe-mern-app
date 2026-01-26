@@ -6,10 +6,8 @@ import { useThemeStore } from './stores/themeStore';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 
-// Legacy pages
-import Home from './pages/home';
-import RecipeList from './pages/RecipeList';
-import RecipeDetails from './components/RecipeDetail';
+// Pages
+import HomePage from './pages/HomePage';
 import AddRecipes from './pages/AddRecipes';
 import ContactUs from './pages/ContactUs';
 
@@ -79,7 +77,7 @@ const App: React.FC = () => {
                 <Navbar />
                 <main className="flex-1">
                     <Routes>
-                        <Route path="/" element={<Home />} />
+                        <Route path="/" element={<HomePage />} />
                         {/* New recipe pages (Sprint 2) */}
                         <Route path="/recipes" element={<RecipeListPage />} />
                         <Route path="/recipes/:slug" element={<RecipeDetailPage />} />

@@ -21,6 +21,9 @@
             "./src/types"
         ]
     },
+    "ts-node": {
+        "transpileOnly": true
+    },
     "include": [
         "src/**/*"
     ],
