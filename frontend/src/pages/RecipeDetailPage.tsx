@@ -4,79 +4,75 @@ import { useQuery } from '@tanstack/react-query';
 import {
     Clock,
     Users,
-    Star,
-    ChefHat,
-    Bookmark,
-    Share2,
-    Printer,
-    CheckCircle2,
-    Timer,
     Flame,
-    ChevronLeft,
     Heart,
+    Leaf,
+    ChefHat,
+    ArrowLeft,
+    ExternalLink,
+    ChevronDown,
+    ChevronUp,
+    Star,
+    Utensils,
+    ShieldCheck,
+    AlertTriangle,
     Play,
 } from 'lucide-react';
-import { recipeApi } from '../services/api';
-import { useAuthStore } from '../stores/authStore';
-import { Button } from '../components/ui/Button';
-import ReviewSection from '../components/recipe/ReviewSection';
-import NutritionOverview from '../components/recipe/NutritionOverview';
-import RecipeRecommendations from '../components/recipe/RecipeRecommendations';
-import { cn, formatTime } from '../utils/helpers';
-import { Recipe, Ingredient, Instruction } from '../types';
+import { spoonacularApi } from '../services/api';
+import { SpoonacularRecipe, NutrientInfo } from '../types';
 
 const RecipeDetailPage: React.FC = () => {
-    const { slug } = useParams<{ slug: string }>();
-    const { user } = useAuthStore();
-    const [completedSteps, setCompletedSteps] = useState<number[]>([]);
-    const [servingsMultiplier, setServingsMultiplier] = useState(1);
-    const [isSaved, setIsSaved] = useState(false);
+    const { id } = useParams<{ id: string }>();
+    const [showAllNutrients, setShowAllNutrients] = useState(false);
+    const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
 
-    // Fetch recipe
     const { data, isLoading, error } = useQuery({
-        queryKey: ['recipe', slug],
-        queryFn: () => recipeApi.getBySlug(slug!),
-        enabled: !!slug,
+        queryKey: ['spoonacularRecipe', id],
+        queryFn: () => spoonacularApi.getRecipe(Number(id)),
+        enabled: !!id,
+        staleTime: 10 * 60 * 1000,
     });
 
-    const recipe: Recipe | undefined = data?.data?.recipe;
+    const { data: similarData } = useQuery({
+        queryKey: ['similarRecipes', id],
+        queryFn: () => spoonacularApi.getSimilar(Number(id)),
+        enabled: !!id,
+        staleTime: 10 * 60 * 1000,
+    });
 
-    const toggleStep = (step: number) => {
-        setCompletedSteps((prev) =>
-            prev.includes(step) ? prev.filter((s) => s !== step) : [...prev, step]
-        );
+    const recipe: SpoonacularRecipe | null = data?.data || null;
+    const similarRecipes: any[] = similarData?.data || [];
+
+    const toggleStep = (stepNum: number) => {
+        setCompletedSteps((prev) => {
+            const next = new Set(prev);
+            if (next.has(stepNum)) next.delete(stepNum);
+            else next.add(stepNum);
+            return next;
+        });
     };
 
-    const handleSave = () => {
-        setIsSaved(!isSaved);
-        // TODO: Implement save API call
+    // Nutrition helpers
+    const mainNutrients = ['Calories', 'Fat', 'Saturated Fat', 'Carbohydrates', 'Sugar', 'Protein', 'Fiber', 'Sodium', 'Cholesterol'];
+    const getMainNutrients = (): NutrientInfo[] => {
+        if (!recipe?.nutrition?.nutrients) return [];
+        return recipe.nutrition.nutrients.filter((n) => mainNutrients.includes(n.name));
     };
-
-    const handleShare = () => {
-        if (navigator.share) {
-            navigator.share({
-                title: recipe?.title,
-                text: recipe?.description,
-                url: window.location.href,
-            });
-        } else {
-            navigator.clipboard.writeText(window.location.href);
-            // TODO: Show toast
-        }
-    };
-
-    const handlePrint = () => {
-        window.print();
-    };
+    const getAllNutrients = (): NutrientInfo[] => recipe?.nutrition?.nutrients || [];
 
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-surface-50 dark:bg-surface-950 animate-pulse">
-                <div className="h-96 bg-surface-200 dark:bg-surface-800" />
-                <div className="container mx-auto px-4 py-8 space-y-4">
-                    <div className="h-8 bg-surface-200 dark:bg-surface-700 rounded w-3/4" />
-                    <div className="h-4 bg-surface-200 dark:bg-surface-700 rounded w-1/2" />
-                    <div className="h-4 bg-surface-200 dark:bg-surface-700 rounded w-full" />
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+                <div className="max-w-5xl mx-auto px-4 py-8">
+                    <div className="animate-pulse">
+                        <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-8" />
+                        <div className="h-80 bg-gray-200 dark:bg-gray-700 rounded-2xl mb-8" />
+                        <div className="space-y-4">
+                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full" />
+                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
+                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -84,365 +80,361 @@ const RecipeDetailPage: React.FC = () => {
 
     if (error || !recipe) {
         return (
-            <div className="min-h-screen bg-surface-50 dark:bg-surface-950 flex items-center justify-center">
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
                 <div className="text-center">
-                    <h2 className="text-2xl font-bold text-surface-900 dark:text-white mb-4">
-                        Recipe not found
-                    </h2>
-                    <Link to="/recipes">
-                        <Button>Browse Recipes</Button>
-                    </Link>
+                    <AlertTriangle className="w-16 h-16 text-red-400 mx-auto mb-4" />
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Recipe Not Found</h2>
+                    <Link to="/recipes" className="text-red-500 hover:text-red-600 font-medium">← Back to Recipes</Link>
                 </div>
             </div>
         );
     }
 
-    const imageUrl = recipe.images?.[0]?.url || recipe.image || '/placeholder-recipe.jpg';
-    const authorName = typeof recipe.author === 'object' ? recipe.author.name : 'Unknown Chef';
-    const authorAvatar = typeof recipe.author === 'object' ? recipe.author.avatar : undefined;
-    const rating = recipe.stats?.avgRating || 0;
-    const reviewCount = recipe.stats?.reviewCount || 0;
+    const caloricBreakdown = recipe.nutrition?.caloricBreakdown;
 
     return (
-        <div className="min-h-screen bg-surface-50 dark:bg-surface-950 print:bg-white">
-            {/* Hero Image */}
-            <div className="relative h-80 md:h-96 lg:h-[28rem] overflow-hidden">
-                <img
-                    src={imageUrl}
-                    alt={recipe.title}
-                    className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
-
-                {/* Back button */}
-                <Link
-                    to="/recipes"
-                    className="absolute top-4 left-4 p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors print:hidden"
-                >
-                    <ChevronLeft className="w-5 h-5" />
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+            {/* ─── Back Button ──────────────────────────── */}
+            <div className="max-w-5xl mx-auto px-4 pt-6">
+                <Link to="/recipes" className="inline-flex items-center gap-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-sm font-medium">
+                    <ArrowLeft className="w-4 h-4" /> Back to Recipes
                 </Link>
-
-                {/* Action buttons */}
-                <div className="absolute top-4 right-4 flex gap-2 print:hidden">
-                    <button
-                        onClick={handleSave}
-                        className={cn(
-                            'p-2.5 rounded-full backdrop-blur-sm transition-all',
-                            isSaved
-                                ? 'bg-primary-500 text-white'
-                                : 'bg-white/20 text-white hover:bg-white/30'
-                        )}
-                    >
-                        <Bookmark className={cn('w-5 h-5', isSaved && 'fill-current')} />
-                    </button>
-                    <button
-                        onClick={handleShare}
-                        className="p-2.5 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
-                    >
-                        <Share2 className="w-5 h-5" />
-                    </button>
-                    <button
-                        onClick={handlePrint}
-                        className="p-2.5 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
-                    >
-                        <Printer className="w-5 h-5" />
-                    </button>
-                </div>
             </div>
 
-            <div className="container mx-auto px-4 py-8">
-                <div className="grid lg:grid-cols-3 gap-8">
-                    {/* Main Content */}
+            <div className="max-w-5xl mx-auto px-4 py-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* ─── Main Content (Left 2 columns) ──────── */}
                     <div className="lg:col-span-2 space-y-8">
-                        {/* Title & Meta */}
-                        <div>
-                            <div className="flex flex-wrap gap-2 mb-4">
-                                {recipe.category && (
-                                    <span className="px-3 py-1 text-sm font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 rounded-full capitalize">
-                                        {recipe.category.replace('-', ' ')}
-                                    </span>
-                                )}
-                                {recipe.cuisine && (
-                                    <span className="px-3 py-1 text-sm font-medium bg-surface-100 dark:bg-surface-800 text-surface-700 dark:text-surface-300 rounded-full capitalize">
-                                        {recipe.cuisine.replace('-', ' ')}
-                                    </span>
-                                )}
-                                {recipe.difficulty && (
-                                    <span
-                                        className={cn(
-                                            'px-3 py-1 text-sm font-medium rounded-full capitalize',
-                                            recipe.difficulty === 'easy' && 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-                                            recipe.difficulty === 'medium' && 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
-                                            recipe.difficulty === 'hard' && 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-                                        )}
-                                    >
-                                        {recipe.difficulty}
-                                    </span>
-                                )}
-                            </div>
+                        {/* Hero Image */}
+                        <div className="relative rounded-2xl overflow-hidden shadow-lg">
+                            <img
+                                src={recipe.image}
+                                alt={recipe.title}
+                                className="w-full h-72 sm:h-96 object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
-                            <h1 className="text-3xl md:text-4xl font-bold text-surface-900 dark:text-white mb-4">
-                                {recipe.title || recipe.name}
-                            </h1>
-
-                            <p className="text-lg text-surface-600 dark:text-surface-400 mb-6">
-                                {recipe.description}
-                            </p>
-
-                            {/* Author & Rating */}
-                            <div className="flex flex-wrap items-center gap-6">
-                                <div className="flex items-center gap-3">
-                                    {authorAvatar ? (
-                                        <img
-                                            src={authorAvatar}
-                                            alt={authorName}
-                                            className="w-10 h-10 rounded-full object-cover"
-                                        />
-                                    ) : (
-                                        <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
-                                            <ChefHat className="w-5 h-5 text-primary-500" />
-                                        </div>
-                                    )}
-                                    <div>
-                                        <p className="font-medium text-surface-900 dark:text-white">
-                                            {authorName}
-                                        </p>
-                                        <p className="text-sm text-surface-500">Recipe Author</p>
-                                    </div>
-                                </div>
-
-                                {rating > 0 && (
-                                    <div className="flex items-center gap-2">
-                                        <div className="flex">
-                                            {[1, 2, 3, 4, 5].map((star) => (
-                                                <Star
-                                                    key={star}
-                                                    className={cn(
-                                                        'w-5 h-5',
-                                                        star <= Math.round(rating)
-                                                            ? 'fill-yellow-400 text-yellow-400'
-                                                            : 'text-surface-300 dark:text-surface-600'
-                                                    )}
-                                                />
-                                            ))}
-                                        </div>
-                                        <span className="font-medium text-surface-900 dark:text-white">
-                                            {rating.toFixed(1)}
+                            <div className="absolute bottom-0 left-0 right-0 p-6">
+                                <h1 className="text-2xl sm:text-3xl font-bold text-white mb-3">{recipe.title}</h1>
+                                <div className="flex flex-wrap gap-2">
+                                    {recipe.diets?.map((diet) => (
+                                        <span key={diet} className="bg-green-500/80 backdrop-blur-sm text-white text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
+                                            <Leaf className="w-3 h-3" />
+                                            {diet}
                                         </span>
-                                        <span className="text-surface-500">({reviewCount} reviews)</span>
-                                    </div>
-                                )}
+                                    ))}
+                                    {recipe.veryHealthy && (
+                                        <span className="bg-emerald-500/80 backdrop-blur-sm text-white text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
+                                            <ShieldCheck className="w-3 h-3" />
+                                            Very Healthy
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                         </div>
 
                         {/* Quick Stats */}
-                        <div className="grid grid-cols-3 gap-4">
-                            <div className="p-4 rounded-xl bg-white dark:bg-surface-800 text-center">
-                                <Clock className="w-6 h-6 text-primary-500 mx-auto mb-2" />
-                                <p className="text-sm text-surface-500 mb-1">Total Time</p>
-                                <p className="font-semibold text-surface-900 dark:text-white">
-                                    {formatTime(recipe.totalTime || (recipe.prepTime || 0) + (recipe.cookTime || 0))}
-                                </p>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <div className="bg-white dark:bg-gray-800 rounded-xl p-4 text-center shadow-sm border border-gray-100 dark:border-gray-700">
+                                <Clock className="w-5 h-5 text-blue-500 mx-auto mb-1" />
+                                <p className="text-lg font-bold text-gray-900 dark:text-white">{recipe.readyInMinutes}</p>
+                                <p className="text-xs text-gray-500">Minutes</p>
                             </div>
-                            <div className="p-4 rounded-xl bg-white dark:bg-surface-800 text-center">
-                                <Users className="w-6 h-6 text-primary-500 mx-auto mb-2" />
-                                <p className="text-sm text-surface-500 mb-1">Servings</p>
-                                <p className="font-semibold text-surface-900 dark:text-white">
-                                    {recipe.servings * servingsMultiplier}
-                                </p>
+                            <div className="bg-white dark:bg-gray-800 rounded-xl p-4 text-center shadow-sm border border-gray-100 dark:border-gray-700">
+                                <Users className="w-5 h-5 text-green-500 mx-auto mb-1" />
+                                <p className="text-lg font-bold text-gray-900 dark:text-white">{recipe.servings}</p>
+                                <p className="text-xs text-gray-500">Servings</p>
                             </div>
-                            <div className="p-4 rounded-xl bg-white dark:bg-surface-800 text-center">
-                                <Flame className="w-6 h-6 text-primary-500 mx-auto mb-2" />
-                                <p className="text-sm text-surface-500 mb-1">Calories</p>
-                                <p className="font-semibold text-surface-900 dark:text-white">
-                                    {recipe.nutrition?.calories || '—'}
-                                </p>
+                            <div className="bg-white dark:bg-gray-800 rounded-xl p-4 text-center shadow-sm border border-gray-100 dark:border-gray-700">
+                                <Heart className="w-5 h-5 text-red-500 mx-auto mb-1" />
+                                <p className="text-lg font-bold text-gray-900 dark:text-white">{recipe.healthScore}</p>
+                                <p className="text-xs text-gray-500">Health Score</p>
+                            </div>
+                            <div className="bg-white dark:bg-gray-800 rounded-xl p-4 text-center shadow-sm border border-gray-100 dark:border-gray-700">
+                                <Star className="w-5 h-5 text-yellow-500 mx-auto mb-1" />
+                                <p className="text-lg font-bold text-gray-900 dark:text-white">{recipe.aggregateLikes}</p>
+                                <p className="text-xs text-gray-500">Likes</p>
                             </div>
                         </div>
+
+                        {/* Summary */}
+                        {recipe.summary && (
+                            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                                <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">About This Recipe</h2>
+                                <div
+                                    className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none"
+                                    dangerouslySetInnerHTML={{ __html: recipe.summary }}
+                                />
+                            </div>
+                        )}
+
+                        {/* Ingredients */}
+                        {recipe.extendedIngredients && recipe.extendedIngredients.length > 0 && (
+                            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                                <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                    <Utensils className="w-5 h-5 text-orange-500" />
+                                    Ingredients ({recipe.extendedIngredients.length})
+                                </h2>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    {recipe.extendedIngredients.map((ing, i) => (
+                                        <div
+                                            key={`${ing.id}-${i}`}
+                                            className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                                        >
+                                            <img
+                                                src={`https://img.spoonacular.com/ingredients_100x100/${ing.image}`}
+                                                alt={ing.name}
+                                                className="w-10 h-10 rounded-lg object-cover bg-gray-100 dark:bg-gray-700"
+                                                onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/40'; }}
+                                            />
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-medium text-gray-900 dark:text-white capitalize">{ing.name}</p>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                    {ing.measures?.us
+                                                        ? `${ing.measures.us.amount} ${ing.measures.us.unitShort}`
+                                                        : ing.original}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
 
                         {/* Instructions */}
-                        <div>
-                            <h2 className="text-2xl font-bold text-surface-900 dark:text-white mb-6">
-                                Instructions
-                            </h2>
-                            <div className="space-y-4">
-                                {(recipe.instructions || recipe.steps || []).map((instruction, index) => {
-                                    const step = typeof instruction === 'string'
-                                        ? { step: index + 1, text: instruction }
-                                        : instruction;
-                                    const isCompleted = completedSteps.includes(step.step);
+                        {recipe.analyzedInstructions && recipe.analyzedInstructions.length > 0 && (
+                            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                        <ChefHat className="w-5 h-5 text-purple-500" />
+                                        Instructions
+                                    </h2>
+                                    <Link
+                                        to={`/cook/${recipe.id}`}
+                                        className="inline-flex items-center gap-1 bg-gradient-to-r from-red-500 to-pink-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-red-600 hover:to-pink-700 transition-all"
+                                    >
+                                        <Play className="w-4 h-4" /> Cooking Mode
+                                    </Link>
+                                </div>
 
-                                    return (
+                                <div className="space-y-4">
+                                    {recipe.analyzedInstructions[0].steps.map((step) => (
                                         <div
-                                            key={step.step}
-                                            className={cn(
-                                                'flex gap-4 p-4 rounded-xl transition-colors cursor-pointer',
-                                                isCompleted
-                                                    ? 'bg-green-50 dark:bg-green-900/20'
-                                                    : 'bg-white dark:bg-surface-800 hover:bg-surface-50 dark:hover:bg-surface-700'
-                                            )}
-                                            onClick={() => toggleStep(step.step)}
+                                            key={step.number}
+                                            onClick={() => toggleStep(step.number)}
+                                            className={`flex gap-4 p-4 rounded-xl cursor-pointer transition-all border ${completedSteps.has(step.number)
+                                                    ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
+                                                    : 'bg-gray-50 dark:bg-gray-700/50 border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600'
+                                                }`}
                                         >
-                                            <div
-                                                className={cn(
-                                                    'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm transition-colors',
-                                                    isCompleted
-                                                        ? 'bg-green-500 text-white'
-                                                        : 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400'
-                                                )}
-                                            >
-                                                {isCompleted ? <CheckCircle2 className="w-5 h-5" /> : step.step}
+                                            <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold text-sm ${completedSteps.has(step.number)
+                                                    ? 'bg-green-500 text-white'
+                                                    : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400'
+                                                }`}>
+                                                {completedSteps.has(step.number) ? '✓' : step.number}
                                             </div>
                                             <div className="flex-1">
-                                                <p
-                                                    className={cn(
-                                                        'text-surface-700 dark:text-surface-300',
-                                                        isCompleted && 'line-through opacity-70'
-                                                    )}
-                                                >
-                                                    {step.text}
+                                                <p className={`text-sm ${completedSteps.has(step.number)
+                                                    ? 'text-gray-500 dark:text-gray-400 line-through'
+                                                    : 'text-gray-700 dark:text-gray-300'}`}>
+                                                    {step.step}
                                                 </p>
-                                                {step.duration && (
-                                                    <p className="text-sm text-surface-500 mt-2 flex items-center gap-1">
-                                                        <Timer className="w-4 h-4" />
-                                                        {formatTime(step.duration)}
-                                                    </p>
+                                                {step.equipment && step.equipment.length > 0 && (
+                                                    <div className="flex flex-wrap gap-1 mt-2">
+                                                        {step.equipment.map((eq) => (
+                                                            <span key={eq.id} className="text-xs bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full">
+                                                                {eq.name}
+                                                            </span>
+                                                        ))}
+                                                    </div>
                                                 )}
-                                                {step.tips && (
-                                                    <p className="text-sm text-primary-600 dark:text-primary-400 mt-2 italic">
-                                                        💡 {step.tips}
+                                                {step.length && (
+                                                    <p className="text-xs text-gray-400 mt-1 flex items-center gap-1">
+                                                        <Clock className="w-3 h-3" /> {step.length.number} {step.length.unit}
                                                     </p>
                                                 )}
                                             </div>
                                         </div>
-                                    );
-                                })}
-                            </div>
-
-                            {/* Progress indicator */}
-                            <div className="mt-6 p-4 rounded-xl bg-white dark:bg-surface-800">
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm font-medium text-surface-600 dark:text-surface-400">
-                                        Progress
-                                    </span>
-                                    <span className="text-sm font-medium text-primary-500">
-                                        {completedSteps.length} / {(recipe.instructions || recipe.steps || []).length}
-                                    </span>
-                                </div>
-                                <div className="h-2 bg-surface-100 dark:bg-surface-700 rounded-full overflow-hidden">
-                                    <div
-                                        className="h-full bg-primary-500 transition-all duration-300"
-                                        style={{
-                                            width: `${(completedSteps.length / (recipe.instructions || recipe.steps || []).length) * 100}%`,
-                                        }}
-                                    />
+                                    ))}
                                 </div>
                             </div>
-                        </div>
+                        )}
 
-                        {/* Reviews Section */}
-                        <ReviewSection recipeId={recipe._id} />
+                        {/* Source */}
+                        {recipe.sourceUrl && (
+                            <div className="text-center">
+                                <a
+                                    href={recipe.sourceUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-red-500 transition-colors"
+                                >
+                                    <ExternalLink className="w-4 h-4" />
+                                    Original source: {recipe.sourceName || 'View'}
+                                </a>
+                            </div>
+                        )}
                     </div>
 
-                    {/* Sidebar - Ingredients */}
-                    <div className="lg:col-span-1">
-                        <div className="sticky top-20">
-                            <div className="bg-white dark:bg-surface-800 rounded-2xl p-6 shadow-soft">
-                                <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-xl font-bold text-surface-900 dark:text-white">
-                                        Ingredients
-                                    </h2>
-                                    <div className="flex items-center gap-2">
-                                        <button
-                                            onClick={() => setServingsMultiplier(Math.max(0.5, servingsMultiplier - 0.5))}
-                                            className="w-8 h-8 rounded-lg bg-surface-100 dark:bg-surface-700 text-surface-600 dark:text-surface-300 hover:bg-surface-200 dark:hover:bg-surface-600 flex items-center justify-center"
-                                        >
-                                            −
-                                        </button>
-                                        <span className="w-8 text-center font-medium text-surface-900 dark:text-white">
-                                            {servingsMultiplier}x
-                                        </span>
-                                        <button
-                                            onClick={() => setServingsMultiplier(servingsMultiplier + 0.5)}
-                                            className="w-8 h-8 rounded-lg bg-surface-100 dark:bg-surface-700 text-surface-600 dark:text-surface-300 hover:bg-surface-200 dark:hover:bg-surface-600 flex items-center justify-center"
-                                        >
-                                            +
-                                        </button>
-                                    </div>
-                                </div>
+                    {/* ─── Sidebar (Right column) ───────────────── */}
+                    <div className="space-y-6">
+                        {/* Nutrition Panel */}
+                        {recipe.nutrition?.nutrients && (
+                            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 sticky top-4">
+                                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                    <Flame className="w-5 h-5 text-orange-500" />
+                                    Nutrition Facts
+                                </h3>
 
-                                <ul className="space-y-3">
-                                    {(recipe.ingredients || []).map((ingredient, index) => {
-                                        const ing = typeof ingredient === 'string'
-                                            ? { item: ingredient, quantity: 1, unit: '' }
-                                            : ingredient;
-
-                                        return (
-                                            <li
-                                                key={index}
-                                                className="flex items-start gap-3 pb-3 border-b border-surface-100 dark:border-surface-700 last:border-0"
-                                            >
-                                                <div className="w-5 h-5 rounded-full border-2 border-primary-500 flex-shrink-0 mt-0.5" />
-                                                <div>
-                                                    <span className="font-medium text-surface-900 dark:text-white">
-                                                        {(ing.quantity * servingsMultiplier).toFixed(ing.quantity % 1 !== 0 ? 1 : 0)} {ing.unit}
-                                                    </span>{' '}
-                                                    <span className="text-surface-600 dark:text-surface-400">
-                                                        {ing.item}
+                                {/* Caloric Breakdown Donut */}
+                                {caloricBreakdown && (
+                                    <div className="mb-6">
+                                        <div className="flex justify-around text-center mb-3">
+                                            <div>
+                                                <div className="relative w-16 h-16 mx-auto">
+                                                    <svg className="w-16 h-16 -rotate-90" viewBox="0 0 36 36">
+                                                        <circle cx="18" cy="18" r="15" fill="none" stroke="#e5e7eb" strokeWidth="3" />
+                                                        <circle cx="18" cy="18" r="15" fill="none" stroke="#3b82f6" strokeWidth="3"
+                                                            strokeDasharray={`${caloricBreakdown.percentProtein} 100`} />
+                                                    </svg>
+                                                    <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-900 dark:text-white">
+                                                        {Math.round(caloricBreakdown.percentProtein)}%
                                                     </span>
-                                                    {ing.notes && (
-                                                        <p className="text-sm text-surface-500 mt-1">{ing.notes}</p>
-                                                    )}
                                                 </div>
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
-
-                                {/* Dietary tags */}
-                                {recipe.dietary && recipe.dietary.length > 0 && (
-                                    <div className="mt-6 pt-6 border-t border-surface-100 dark:border-surface-700">
-                                        <p className="text-sm text-surface-500 mb-3">Dietary</p>
-                                        <div className="flex flex-wrap gap-2">
-                                            {recipe.dietary.map((tag) => (
-                                                <span
-                                                    key={tag}
-                                                    className="px-2.5 py-1 text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full capitalize"
-                                                >
-                                                    {tag.replace('-', ' ')}
-                                                </span>
-                                            ))}
+                                                <p className="text-xs text-gray-500 mt-1">Protein</p>
+                                            </div>
+                                            <div>
+                                                <div className="relative w-16 h-16 mx-auto">
+                                                    <svg className="w-16 h-16 -rotate-90" viewBox="0 0 36 36">
+                                                        <circle cx="18" cy="18" r="15" fill="none" stroke="#e5e7eb" strokeWidth="3" />
+                                                        <circle cx="18" cy="18" r="15" fill="none" stroke="#f59e0b" strokeWidth="3"
+                                                            strokeDasharray={`${caloricBreakdown.percentFat} 100`} />
+                                                    </svg>
+                                                    <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-900 dark:text-white">
+                                                        {Math.round(caloricBreakdown.percentFat)}%
+                                                    </span>
+                                                </div>
+                                                <p className="text-xs text-gray-500 mt-1">Fat</p>
+                                            </div>
+                                            <div>
+                                                <div className="relative w-16 h-16 mx-auto">
+                                                    <svg className="w-16 h-16 -rotate-90" viewBox="0 0 36 36">
+                                                        <circle cx="18" cy="18" r="15" fill="none" stroke="#e5e7eb" strokeWidth="3" />
+                                                        <circle cx="18" cy="18" r="15" fill="none" stroke="#10b981" strokeWidth="3"
+                                                            strokeDasharray={`${caloricBreakdown.percentCarbs} 100`} />
+                                                    </svg>
+                                                    <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-900 dark:text-white">
+                                                        {Math.round(caloricBreakdown.percentCarbs)}%
+                                                    </span>
+                                                </div>
+                                                <p className="text-xs text-gray-500 mt-1">Carbs</p>
+                                            </div>
                                         </div>
                                     </div>
                                 )}
 
-                                {/* Nutrition overview */}
-                                {recipe.nutrition && (
-                                    <div className="mt-6 pt-6 border-t border-surface-100 dark:border-surface-700">
-                                        <NutritionOverview nutrition={recipe.nutrition} servings={recipe.servings} />
-                                    </div>
-                                )}
+                                {/* Nutrient Table */}
+                                <div className="space-y-1">
+                                    {(showAllNutrients ? getAllNutrients() : getMainNutrients()).map((nutrient) => (
+                                        <div key={nutrient.name} className="flex items-center justify-between py-1.5 border-b border-gray-100 dark:border-gray-700 last:border-0">
+                                            <span className="text-sm text-gray-600 dark:text-gray-400">{nutrient.name}</span>
+                                            <div className="text-right">
+                                                <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                                                    {Math.round(nutrient.amount * 10) / 10}{nutrient.unit}
+                                                </span>
+                                                {nutrient.percentOfDailyNeeds != null && (
+                                                    <span className="text-xs text-gray-400 ml-1">
+                                                        ({Math.round(nutrient.percentOfDailyNeeds)}%)
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
 
-                                <Button className="w-full mt-6" leftIcon={<Heart className="w-4 h-4" />}>
-                                    I Made This!
-                                </Button>
-                                <Link to={`/cook/${recipe.slug || recipe._id}`} className="block mt-3">
-                                    <Button variant="secondary" className="w-full" leftIcon={<Play className="w-4 h-4" />}>
-                                        Start Cooking Mode
-                                    </Button>
-                                </Link>
+                                <button
+                                    onClick={() => setShowAllNutrients(!showAllNutrients)}
+                                    className="flex items-center justify-center gap-1 w-full mt-3 text-sm text-red-500 hover:text-red-600 font-medium"
+                                >
+                                    {showAllNutrients ? (
+                                        <>Show Less <ChevronUp className="w-4 h-4" /></>
+                                    ) : (
+                                        <>Show All {getAllNutrients().length} Nutrients <ChevronDown className="w-4 h-4" /></>
+                                    )}
+                                </button>
                             </div>
+                        )}
 
-                            {/* Recommendations */}
-                            <RecipeRecommendations
-                                currentRecipeId={recipe._id}
-                                category={recipe.category}
-                                cuisine={recipe.cuisine}
-                                className="mt-6 bg-white dark:bg-surface-800 rounded-2xl p-6 shadow-soft"
-                            />
+                        {/* Diet Info */}
+                        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                            <h3 className="font-bold text-gray-900 dark:text-white mb-3">Diet Information</h3>
+                            <div className="space-y-2">
+                                {[
+                                    { label: 'Vegetarian', value: recipe.vegetarian },
+                                    { label: 'Vegan', value: recipe.vegan },
+                                    { label: 'Gluten Free', value: recipe.glutenFree },
+                                    { label: 'Dairy Free', value: recipe.dairyFree },
+                                    { label: 'Very Healthy', value: recipe.veryHealthy },
+                                    { label: 'Sustainable', value: recipe.sustainable },
+                                    { label: 'Low FODMAP', value: recipe.lowFodmap },
+                                ].map(({ label, value }) => (
+                                    <div key={label} className="flex items-center justify-between text-sm">
+                                        <span className="text-gray-600 dark:text-gray-400">{label}</span>
+                                        <span className={`font-medium ${value ? 'text-green-600' : 'text-gray-400'}`}>
+                                            {value ? '✓ Yes' : '✗ No'}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
+
+                        {/* Cooking Mode CTA */}
+                        <Link
+                            to={`/cook/${recipe.id}`}
+                            className="block bg-gradient-to-r from-red-500 to-pink-600 text-white rounded-2xl p-4 text-center shadow-sm hover:from-red-600 hover:to-pink-700 transition-all"
+                        >
+                            <Play className="w-8 h-8 mx-auto mb-2" />
+                            <p className="font-bold">Start Cooking Mode</p>
+                            <p className="text-sm text-white/80">Step-by-step guided experience</p>
+                        </Link>
                     </div>
                 </div>
+
+                {/* ─── Similar Recipes ──────────────────────── */}
+                {similarRecipes.length > 0 && (
+                    <div className="mt-12">
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Similar Recipes</h2>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                            {similarRecipes.map((sr: any) => (
+                                <Link
+                                    key={sr.id}
+                                    to={`/recipes/${sr.id}`}
+                                    className="group bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all hover:-translate-y-0.5 border border-gray-100 dark:border-gray-700"
+                                >
+                                    <div className="relative h-28 overflow-hidden">
+                                        <img
+                                            src={`https://img.spoonacular.com/recipes/${sr.id}-312x231.jpg`}
+                                            alt={sr.title}
+                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                            loading="lazy"
+                                        />
+                                    </div>
+                                    <div className="p-2">
+                                        <h3 className="text-xs font-semibold text-gray-900 dark:text-white line-clamp-2 group-hover:text-red-500 transition-colors">
+                                            {sr.title}
+                                        </h3>
+                                        {sr.readyInMinutes && (
+                                            <p className="text-xs text-gray-400 mt-1 flex items-center gap-1">
+                                                <Clock className="w-3 h-3" />
+                                                {sr.readyInMinutes} min
+                                            </p>
+                                        )}
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

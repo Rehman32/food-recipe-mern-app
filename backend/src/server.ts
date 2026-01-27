@@ -19,6 +19,7 @@ import reviewRoutes from './routes/reviews';
 import collectionRoutes from './routes/collections';
 import notificationRoutes from './routes/notifications';
 import mealPlanRoutes from './routes/mealPlans';
+import spoonacularRoutes from './routes/spoonacular';
 
 // Initialize express app
 const app = express();
@@ -68,6 +69,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/collections', collectionRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/meal-plans', mealPlanRoutes);
+app.use('/api/spoonacular', spoonacularRoutes);
 
 // Root route
 app.get('/', (req: Request, res: Response) => {

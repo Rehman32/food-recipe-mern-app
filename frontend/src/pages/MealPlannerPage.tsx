@@ -1,309 +1,276 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
-    CalendarDays, Plus, ChefHat, Trash2, ShoppingCart,
-    ChevronLeft, ChevronRight, Clock, Utensils, Coffee, Moon, Cookie,
+    CalendarDays,
+    Flame,
+    Clock,
+    Loader2,
+    RefreshCw,
+    Leaf,
+    Target,
+    BarChart3,
 } from 'lucide-react';
-import { mealPlanApi, recipeApi } from '../services/api';
-import { useAuthStore } from '../stores/authStore';
-import { Button } from '../components/ui/Button';
-import { cn } from '../utils/helpers';
+import { spoonacularApi } from '../services/api';
 
-const DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const MEAL_TYPES = [
-    { key: 'breakfast', label: 'Breakfast', icon: Coffee, color: 'text-amber-500' },
-    { key: 'lunch', label: 'Lunch', icon: Utensils, color: 'text-green-500' },
-    { key: 'dinner', label: 'Dinner', icon: Moon, color: 'text-indigo-500' },
-    { key: 'snacks', label: 'Snacks', icon: Cookie, color: 'text-pink-500' },
+const DIET_OPTIONS = [
+    { value: '', label: 'No Restriction' },
+    { value: 'vegetarian', label: 'Vegetarian' },
+    { value: 'vegan', label: 'Vegan' },
+    { value: 'ketogenic', label: 'Keto' },
+    { value: 'paleo', label: 'Paleo' },
+    { value: 'gluten free', label: 'Gluten Free' },
+    { value: 'pescetarian', label: 'Pescetarian' },
 ];
 
-function getWeekDates(offset: number = 0) {
-    const now = new Date();
-    const start = new Date(now);
-    start.setDate(now.getDate() - now.getDay() + offset * 7);
-    start.setHours(0, 0, 0, 0);
-    const end = new Date(start);
-    end.setDate(start.getDate() + 6);
-    end.setHours(23, 59, 59, 999);
-    return { start, end };
-}
-
 const MealPlannerPage: React.FC = () => {
-    const { user } = useAuthStore();
-    const queryClient = useQueryClient();
-    const [weekOffset, setWeekOffset] = useState(0);
-    const [showRecipePicker, setShowRecipePicker] = useState<{ date: string; mealType: string } | null>(null);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [targetCalories, setTargetCalories] = useState(2000);
+    const [diet, setDiet] = useState('');
+    const [exclude, setExclude] = useState('');
+    const [timeFrame, setTimeFrame] = useState<'day' | 'week'>('day');
+    const [generateKey, setGenerateKey] = useState(0); // used to re-trigger query
 
-    const { start, end } = getWeekDates(weekOffset);
-
-    // Fetch current plan
-    const { data: planData, isLoading } = useQuery({
-        queryKey: ['mealPlan', weekOffset],
-        queryFn: () => mealPlanApi.getCurrent(),
-        enabled: !!user,
-    });
-
-    // Fetch recipes for picker
-    const { data: recipesData } = useQuery({
-        queryKey: ['recipeSearch', searchQuery],
-        queryFn: () => recipeApi.getAll({ q: searchQuery, limit: 12 } as any),
-        enabled: showRecipePicker !== null,
-    });
-
-    // Create plan
-    const createMutation = useMutation({
-        mutationFn: () =>
-            mealPlanApi.create({
-                name: `Week of ${start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`,
-                startDate: start.toISOString(),
-                endDate: end.toISOString(),
+    const { data, isLoading, isFetching } = useQuery({
+        queryKey: ['mealPlan', targetCalories, diet, exclude, timeFrame, generateKey],
+        queryFn: () =>
+            spoonacularApi.generateMealPlan({
+                timeFrame,
+                targetCalories,
+                diet: diet || undefined,
+                exclude: exclude || undefined,
             }),
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['mealPlan'] }),
+        staleTime: 0, // Always fresh
     });
 
-    // Update day
-    const updateDayMutation = useMutation({
-        mutationFn: (data: { planId: string; date: string; mealType: string; recipeId?: string; servings?: number }) =>
-            mealPlanApi.updateDay(data.planId, data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['mealPlan'] });
-            setShowRecipePicker(null);
-        },
-    });
+    const mealPlan = data?.data;
 
-    const plan = planData?.data?.plan;
-    const recipes = recipesData?.data?.recipes || recipesData?.data?.data || [];
-
-    // Build week display
-    const weekDays = Array.from({ length: 7 }, (_, i) => {
-        const date = new Date(start);
-        date.setDate(start.getDate() + i);
-        return date;
-    });
-
-    const getDayData = (date: Date) => {
-        if (!plan?.days) return null;
-        const dateStr = date.toISOString().split('T')[0];
-        return plan.days.find((d: any) => new Date(d.date).toISOString().split('T')[0] === dateStr);
+    const handleRegenerate = () => {
+        setGenerateKey((prev) => prev + 1);
     };
-
-    const getSlotRecipe = (dayData: any, mealType: string) => {
-        if (!dayData) return null;
-        if (mealType === 'snacks') return dayData.snacks?.[0]?.recipe || null;
-        return dayData[mealType]?.recipe || null;
-    };
-
-    const handleAddRecipe = (recipeId: string) => {
-        if (!plan || !showRecipePicker) return;
-        updateDayMutation.mutate({
-            planId: plan._id,
-            date: showRecipePicker.date,
-            mealType: showRecipePicker.mealType,
-            recipeId,
-            servings: 2,
-        });
-    };
-
-    const handleRemoveRecipe = (dateStr: string, mealType: string) => {
-        if (!plan) return;
-        updateDayMutation.mutate({
-            planId: plan._id,
-            date: dateStr,
-            mealType,
-        });
-    };
-
-    if (!user) {
-        return (
-            <div className="min-h-screen bg-surface-50 dark:bg-surface-950 flex items-center justify-center">
-                <div className="text-center">
-                    <h2 className="text-2xl font-bold text-surface-900 dark:text-white mb-4">Sign in to plan meals</h2>
-                    <Link to="/"><Button>Go Home</Button></Link>
-                </div>
-            </div>
-        );
-    }
 
     return (
-        <div className="min-h-screen bg-surface-50 dark:bg-surface-950">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
             {/* Header */}
-            <div className="bg-white dark:bg-surface-900 border-b border-surface-200 dark:border-surface-800">
-                <div className="container mx-auto px-4 py-8">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                            <CalendarDays className="w-7 h-7 text-primary-500" />
-                            <div>
-                                <h1 className="text-3xl font-bold text-surface-900 dark:text-white">Meal Planner</h1>
-                                <p className="text-surface-600 dark:text-surface-400">Plan your weekly meals and generate shopping lists</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            {plan && (
-                                <Link to={`/shopping-list/${plan._id}`}>
-                                    <Button variant="secondary" leftIcon={<ShoppingCart className="w-4 h-4" />}>Shopping List</Button>
-                                </Link>
-                            )}
-                        </div>
-                    </div>
+            <div className="bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-600 text-white py-10">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+                        <CalendarDays className="w-8 h-8" />
+                        AI Meal Planner
+                    </h1>
+                    <p className="text-white/80">
+                        Generate smart meal plans tailored to your calorie goals and diet preferences
+                    </p>
                 </div>
             </div>
 
-            <div className="container mx-auto px-4 py-8">
-                {/* Week Navigation */}
-                <div className="flex items-center justify-between mb-6">
-                    <button onClick={() => setWeekOffset((w) => w - 1)} className="p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors">
-                        <ChevronLeft className="w-5 h-5 text-surface-600 dark:text-surface-400" />
-                    </button>
-                    <div className="text-center">
-                        <h2 className="text-lg font-semibold text-surface-900 dark:text-white">
-                            {start.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} – {end.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-                        </h2>
-                        {weekOffset !== 0 && (
-                            <button onClick={() => setWeekOffset(0)} className="text-sm text-primary-500 hover:text-primary-600">This Week</button>
-                        )}
-                    </div>
-                    <button onClick={() => setWeekOffset((w) => w + 1)} className="p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors">
-                        <ChevronRight className="w-5 h-5 text-surface-600 dark:text-surface-400" />
-                    </button>
-                </div>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                {/* Controls */}
+                <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 mb-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+                        {/* Time Frame */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Plan Type</label>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => setTimeFrame('day')}
+                                    className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${timeFrame === 'day'
+                                        ? 'bg-indigo-500 text-white'
+                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                                        }`}
+                                >
+                                    Daily
+                                </button>
+                                <button
+                                    onClick={() => setTimeFrame('week')}
+                                    className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${timeFrame === 'week'
+                                        ? 'bg-indigo-500 text-white'
+                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                                        }`}
+                                >
+                                    Weekly
+                                </button>
+                            </div>
+                        </div>
 
-                {/* Create plan prompt */}
-                {!isLoading && !plan && (
-                    <div className="text-center py-16 bg-white dark:bg-surface-800 rounded-2xl">
-                        <CalendarDays className="w-16 h-16 text-surface-300 dark:text-surface-600 mx-auto mb-4" />
-                        <h3 className="text-xl font-bold text-surface-900 dark:text-white mb-2">No meal plan for this week</h3>
-                        <p className="text-surface-500 mb-6">Create a meal plan to organize your weekly meals</p>
-                        <Button onClick={() => createMutation.mutate()} leftIcon={<Plus className="w-4 h-4" />}>
-                            {createMutation.isPending ? 'Creating...' : 'Create Meal Plan'}
-                        </Button>
+                        {/* Calories */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                <Target className="w-3 h-3 inline mr-1" />
+                                Target: {targetCalories} cal
+                            </label>
+                            <input
+                                type="range"
+                                min="1200"
+                                max="3500"
+                                step="100"
+                                value={targetCalories}
+                                onChange={(e) => setTargetCalories(Number(e.target.value))}
+                                className="w-full accent-indigo-500"
+                            />
+                        </div>
+
+                        {/* Diet */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                <Leaf className="w-3 h-3 inline mr-1" /> Diet
+                            </label>
+                            <select
+                                value={diet}
+                                onChange={(e) => setDiet(e.target.value)}
+                                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-white"
+                            >
+                                {DIET_OPTIONS.map((d) => (
+                                    <option key={d.value} value={d.value}>{d.label}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Exclude */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Exclude</label>
+                            <input
+                                type="text"
+                                value={exclude}
+                                onChange={(e) => setExclude(e.target.value)}
+                                placeholder="e.g., shellfish, olives"
+                                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-white"
+                            />
+                        </div>
+
+                        {/* Generate */}
+                        <button
+                            onClick={handleRegenerate}
+                            disabled={isFetching}
+                            className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white py-2 px-4 rounded-lg font-medium hover:from-purple-600 hover:to-indigo-700 transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+                        >
+                            {isFetching ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                                <RefreshCw className="w-4 h-4" />
+                            )}
+                            Regenerate
+                        </button>
                     </div>
-                )}
+                </div>
 
                 {/* Loading */}
                 {isLoading && (
-                    <div className="grid grid-cols-7 gap-3">
-                        {Array.from({ length: 7 }).map((_, i) => (
-                            <div key={i} className="bg-white dark:bg-surface-800 rounded-xl p-4 animate-pulse h-64" />
+                    <div className="text-center py-16">
+                        <Loader2 className="w-10 h-10 animate-spin text-indigo-500 mx-auto mb-4" />
+                        <p className="text-gray-500 dark:text-gray-400">Generating your meal plan...</p>
+                    </div>
+                )}
+
+                {/* Daily Plan */}
+                {!isLoading && mealPlan && timeFrame === 'day' && (
+                    <div>
+                        {/* Nutrient Summary */}
+                        {mealPlan.nutrients && (
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                                {[
+                                    { label: 'Calories', value: Math.round(mealPlan.nutrients.calories), unit: 'kcal', color: 'text-orange-500', icon: Flame },
+                                    { label: 'Protein', value: Math.round(mealPlan.nutrients.protein), unit: 'g', color: 'text-blue-500', icon: BarChart3 },
+                                    { label: 'Carbs', value: Math.round(mealPlan.nutrients.carbohydrates), unit: 'g', color: 'text-green-500', icon: BarChart3 },
+                                    { label: 'Fat', value: Math.round(mealPlan.nutrients.fat), unit: 'g', color: 'text-yellow-500', icon: BarChart3 },
+                                ].map((n) => (
+                                    <div key={n.label} className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 text-center">
+                                        <n.icon className={`w-6 h-6 ${n.color} mx-auto mb-1`} />
+                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{n.value}<span className="text-sm font-normal text-gray-500 ml-0.5">{n.unit}</span></p>
+                                        <p className="text-xs text-gray-500">{n.label}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Meals */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {mealPlan.meals?.map((meal: any, i: number) => (
+                                <Link
+                                    key={meal.id}
+                                    to={`/recipes/${meal.id}`}
+                                    className="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 border border-gray-100 dark:border-gray-700"
+                                >
+                                    <div className="relative h-48 overflow-hidden">
+                                        <img
+                                            src={`https://img.spoonacular.com/recipes/${meal.id}-556x370.jpg`}
+                                            alt={meal.title}
+                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                        <div className="absolute top-3 left-3">
+                                            <span className={`text-xs font-bold px-3 py-1 rounded-full ${i === 0 ? 'bg-yellow-500 text-yellow-900' :
+                                                i === 1 ? 'bg-orange-500 text-white' :
+                                                    'bg-indigo-500 text-white'
+                                                }`}>
+                                                {i === 0 ? '🌅 Breakfast' : i === 1 ? '☀️ Lunch' : '🌙 Dinner'}
+                                            </span>
+                                        </div>
+                                        {meal.readyInMinutes && (
+                                            <div className="absolute bottom-3 right-3 bg-black/60 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
+                                                <Clock className="w-3 h-3" /> {meal.readyInMinutes}m
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="p-4">
+                                        <h3 className="font-semibold text-gray-900 dark:text-white text-sm line-clamp-2 group-hover:text-indigo-500 transition-colors">
+                                            {meal.title}
+                                        </h3>
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            {meal.servings} serving{meal.servings !== 1 ? 's' : ''}
+                                        </p>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Weekly Plan */}
+                {!isLoading && mealPlan && timeFrame === 'week' && mealPlan.week && (
+                    <div className="space-y-8">
+                        {Object.entries(mealPlan.week).map(([day, dayData]: [string, any]) => (
+                            <div key={day}>
+                                <h3 className="text-lg font-bold text-gray-900 dark:text-white capitalize mb-4 flex items-center gap-2">
+                                    <CalendarDays className="w-5 h-5 text-indigo-500" />
+                                    {day}
+                                    <span className="text-sm font-normal text-gray-500 ml-2">
+                                        {dayData.nutrients && `${Math.round(dayData.nutrients.calories)} cal`}
+                                    </span>
+                                </h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {dayData.meals?.map((meal: any, i: number) => (
+                                        <Link
+                                            key={meal.id}
+                                            to={`/recipes/${meal.id}`}
+                                            className="group flex items-center gap-3 bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm hover:shadow-md transition-all border border-gray-100 dark:border-gray-700"
+                                        >
+                                            <img
+                                                src={`https://img.spoonacular.com/recipes/${meal.id}-240x150.jpg`}
+                                                alt={meal.title}
+                                                className="w-16 h-16 rounded-lg object-cover"
+                                            />
+                                            <div className="flex-1 min-w-0">
+                                                <span className={`text-xs font-bold ${i === 0 ? 'text-yellow-600' : i === 1 ? 'text-orange-600' : 'text-indigo-600'
+                                                    }`}>
+                                                    {i === 0 ? 'Breakfast' : i === 1 ? 'Lunch' : 'Dinner'}
+                                                </span>
+                                                <h4 className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-1 group-hover:text-indigo-500 transition-colors">
+                                                    {meal.title}
+                                                </h4>
+                                                {meal.readyInMinutes && (
+                                                    <p className="text-xs text-gray-400 flex items-center gap-1">
+                                                        <Clock className="w-3 h-3" /> {meal.readyInMinutes} min
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
                         ))}
                     </div>
                 )}
-
-                {/* Weekly Grid */}
-                {plan && (
-                    <div className="grid grid-cols-1 md:grid-cols-7 gap-3">
-                        {weekDays.map((date) => {
-                            const dateStr = date.toISOString().split('T')[0];
-                            const dayData = getDayData(date);
-                            const isToday = new Date().toDateString() === date.toDateString();
-
-                            return (
-                                <div
-                                    key={dateStr}
-                                    className={cn(
-                                        'bg-white dark:bg-surface-800 rounded-xl p-4 transition-all',
-                                        isToday && 'ring-2 ring-primary-500'
-                                    )}
-                                >
-                                    <div className="text-center mb-3">
-                                        <p className="text-xs text-surface-500 uppercase">{DAYS_OF_WEEK[date.getDay()]}</p>
-                                        <p className={cn('text-lg font-bold', isToday ? 'text-primary-500' : 'text-surface-900 dark:text-white')}>
-                                            {date.getDate()}
-                                        </p>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        {MEAL_TYPES.map(({ key, label, icon: Icon, color }) => {
-                                            const recipe = getSlotRecipe(dayData, key);
-
-                                            return (
-                                                <div key={key} className="group">
-                                                    <div className="flex items-center gap-1 mb-1">
-                                                        <Icon className={cn('w-3 h-3', color)} />
-                                                        <span className="text-xs font-medium text-surface-500">{label}</span>
-                                                    </div>
-                                                    {recipe ? (
-                                                        <div className="relative p-2 rounded-lg bg-surface-50 dark:bg-surface-700 group">
-                                                            <Link to={`/recipes/${recipe.slug || recipe._id}`}>
-                                                                <p className="text-xs font-medium text-surface-900 dark:text-white truncate hover:text-primary-500 transition-colors">
-                                                                    {recipe.title}
-                                                                </p>
-                                                            </Link>
-                                                            {recipe.totalTime && (
-                                                                <p className="text-[10px] text-surface-400 flex items-center gap-0.5 mt-0.5">
-                                                                    <Clock className="w-2.5 h-2.5" />{recipe.totalTime}m
-                                                                </p>
-                                                            )}
-                                                            <button
-                                                                onClick={() => handleRemoveRecipe(dateStr, key)}
-                                                                className="absolute top-1 right-1 p-0.5 rounded bg-red-100 dark:bg-red-900/30 text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                                                            >
-                                                                <Trash2 className="w-3 h-3" />
-                                                            </button>
-                                                        </div>
-                                                    ) : (
-                                                        <button
-                                                            onClick={() => setShowRecipePicker({ date: dateStr, mealType: key })}
-                                                            className="w-full p-2 rounded-lg border border-dashed border-surface-200 dark:border-surface-600 text-surface-400 hover:border-primary-500 hover:text-primary-500 transition-colors"
-                                                        >
-                                                            <Plus className="w-3 h-3 mx-auto" />
-                                                        </button>
-                                                    )}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                )}
             </div>
-
-            {/* Recipe Picker Modal */}
-            {showRecipePicker && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={() => setShowRecipePicker(null)}>
-                    <div className="bg-white dark:bg-surface-800 rounded-2xl w-full max-w-lg max-h-[80vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
-                        <div className="p-6 border-b border-surface-200 dark:border-surface-700">
-                            <h3 className="text-lg font-bold text-surface-900 dark:text-white mb-3">Add Recipe</h3>
-                            <input
-                                type="text"
-                                placeholder="Search recipes..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full px-4 py-2.5 rounded-xl border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-900 text-surface-900 dark:text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                                autoFocus
-                            />
-                        </div>
-                        <div className="p-4 overflow-y-auto max-h-96 space-y-2">
-                            {recipes.length === 0 ? (
-                                <p className="text-center py-8 text-surface-500">No recipes found</p>
-                            ) : (
-                                recipes.map((recipe: any) => (
-                                    <button
-                                        key={recipe._id}
-                                        onClick={() => handleAddRecipe(recipe._id)}
-                                        className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-surface-50 dark:hover:bg-surface-700 transition-colors text-left"
-                                    >
-                                        {recipe.images?.[0]?.url ? (
-                                            <img src={recipe.images[0].url} alt="" className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />
-                                        ) : (
-                                            <div className="w-12 h-12 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0">
-                                                <ChefHat className="w-5 h-5 text-primary-500" />
-                                            </div>
-                                        )}
-                                        <div className="min-w-0">
-                                            <p className="font-medium text-surface-900 dark:text-white truncate">{recipe.title}</p>
-                                            <p className="text-xs text-surface-500">{recipe.totalTime}min · {recipe.servings} servings</p>
-                                        </div>
-                                    </button>
-                                ))
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

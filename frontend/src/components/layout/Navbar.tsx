@@ -11,6 +11,7 @@ import {
     CalendarDays,
     Sparkles,
     FolderOpen,
+    Apple,
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { ThemeToggle } from '../ui/ThemeToggle';
@@ -31,10 +32,9 @@ const Navbar: React.FC = () => {
     const navLinks = [
         { to: '/', label: 'Home' },
         { to: '/recipes', label: 'Recipes' },
-        { to: '/feed', label: 'Feed' },
+        { to: '/nutrition', label: 'Nutrition', icon: Apple },
         { to: '/ai-suggestions', label: 'AI Chef', icon: Sparkles },
         { to: '/meal-planner', label: 'Meal Plan', requiresAuth: true },
-        { to: '/add-recipe', label: 'Add Recipe', requiresAuth: true },
     ];
 
     const openAuth = (mode: 'login' | 'register') => {

@@ -8,8 +8,8 @@ import Footer from './components/layout/Footer';
 
 // Pages
 import HomePage from './pages/HomePage';
-import AddRecipes from './pages/AddRecipes';
 import ContactUs from './pages/ContactUs';
+import NutritionPage from './pages/NutritionPage';
 
 // New pages (Sprint 2 & 3)
 import RecipeListPage from './pages/RecipeListPage';
@@ -80,7 +80,7 @@ const App: React.FC = () => {
                         <Route path="/" element={<HomePage />} />
                         {/* New recipe pages (Sprint 2) */}
                         <Route path="/recipes" element={<RecipeListPage />} />
-                        <Route path="/recipes/:slug" element={<RecipeDetailPage />} />
+                        <Route path="/recipes/:id" element={<RecipeDetailPage />} />
                         {/* User profile & collections (Sprint 3) */}
                         <Route path="/profile/:username" element={<ProfilePage />} />
                         <Route path="/collections" element={<CollectionsPage />} />
@@ -94,9 +94,10 @@ const App: React.FC = () => {
                         {/* AI & Polish (Sprint 6) */}
                         <Route path="/ai-suggestions" element={<AISuggestionsPage />} />
                         <Route path="/search" element={<SmartSearchPage />} />
-                        <Route path="/cook/:slug" element={<CookingModePage />} />
+                        <Route path="/cook/:id" element={<CookingModePage />} />
+                        {/* New Nutrition page */}
+                        <Route path="/nutrition" element={<NutritionPage />} />
                         {/* Legacy routes */}
-                        <Route path="/add-recipe" element={<AddRecipes />} />
                         <Route path="/contact" element={<ContactUs />} />
                         <Route path="/auth/callback" element={<AuthCallback />} />
                     </Routes>

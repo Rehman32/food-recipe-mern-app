@@ -192,3 +192,161 @@ export interface RecipeFilters {
   page?: number;
   limit?: number;
 }
+
+// Spoonacular types
+export interface SpoonacularRecipe {
+  id: number;
+  title: string;
+  image: string;
+  imageType?: string;
+  readyInMinutes: number;
+  servings: number;
+  sourceUrl?: string;
+  sourceName?: string;
+  summary?: string;
+  instructions?: string;
+  cuisines: string[];
+  dishTypes: string[];
+  diets: string[];
+  occasions: string[];
+  healthScore: number;
+  spoonacularScore?: number;
+  pricePerServing?: number;
+  cheap?: boolean;
+  dairyFree: boolean;
+  glutenFree: boolean;
+  vegan: boolean;
+  vegetarian: boolean;
+  veryHealthy: boolean;
+  veryPopular: boolean;
+  sustainable?: boolean;
+  lowFodmap?: boolean;
+  weightWatcherSmartPoints?: number;
+  gaps?: string;
+  preparationMinutes?: number;
+  cookingMinutes?: number;
+  aggregateLikes?: number;
+  creditsText?: string;
+  license?: string;
+  extendedIngredients?: SpoonacularIngredient[];
+  analyzedInstructions?: AnalyzedInstruction[];
+  nutrition?: SpoonacularNutrition;
+}
+
+export interface SpoonacularIngredient {
+  id: number;
+  aisle: string;
+  image: string;
+  name: string;
+  nameClean: string;
+  original: string;
+  originalName: string;
+  amount: number;
+  unit: string;
+  measures?: {
+    us: { amount: number; unitShort: string; unitLong: string };
+    metric: { amount: number; unitShort: string; unitLong: string };
+  };
+}
+
+export interface AnalyzedInstruction {
+  name: string;
+  steps: InstructionStep[];
+}
+
+export interface InstructionStep {
+  number: number;
+  step: string;
+  ingredients: { id: number; name: string; image: string }[];
+  equipment: { id: number; name: string; image: string }[];
+  length?: { number: number; unit: string };
+}
+
+export interface SpoonacularNutrition {
+  nutrients: NutrientInfo[];
+  properties?: NutrientInfo[];
+  flavonoids?: NutrientInfo[];
+  ingredients?: any[];
+  caloricBreakdown?: {
+    percentProtein: number;
+    percentFat: number;
+    percentCarbs: number;
+  };
+  weightPerServing?: {
+    amount: number;
+    unit: string;
+  };
+}
+
+export interface NutrientInfo {
+  name: string;
+  amount: number;
+  unit: string;
+  percentOfDailyNeeds?: number;
+}
+
+export interface SpoonacularSearchResult {
+  offset: number;
+  number: number;
+  results: SpoonacularRecipe[];
+  totalResults: number;
+}
+
+export interface MealPlanDay {
+  meals: {
+    id: number;
+    title: string;
+    imageType: string;
+    readyInMinutes: number;
+    servings: number;
+    sourceUrl: string;
+  }[];
+  nutrients: {
+    calories: number;
+    carbohydrates: number;
+    fat: number;
+    protein: number;
+  };
+}
+
+export interface SpoonacularAutocomplete {
+  id: number;
+  title: string;
+  imageType: string;
+}
+
+export interface IngredientSearchResult {
+  id: number;
+  title: string;
+  image: string;
+  imageType: string;
+  usedIngredientCount: number;
+  missedIngredientCount: number;
+  missedIngredients: { name: string; amount: number; unit: string; image: string }[];
+  usedIngredients: { name: string; amount: number; unit: string; image: string }[];
+  likes: number;
+}
+
+// Spoonacular filter types
+export interface SpoonacularFilters {
+  query?: string;
+  cuisine?: string;
+  diet?: string;
+  intolerances?: string;
+  type?: string;
+  maxReadyTime?: number;
+  minCalories?: number;
+  maxCalories?: number;
+  minProtein?: number;
+  maxProtein?: number;
+  minCarbs?: number;
+  maxCarbs?: number;
+  minFat?: number;
+  maxFat?: number;
+  sort?: string;
+  sortDirection?: string;
+  offset?: number;
+  number?: number;
+  includeIngredients?: string;
+  excludeIngredients?: string;
+}

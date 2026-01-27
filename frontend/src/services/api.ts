@@ -311,5 +311,65 @@ export const mealPlanApi = {
   },
 };
 
+// Spoonacular API (proxied through backend)
+export const spoonacularApi = {
+  search: async (params: Record<string, any> = {}) => {
+    const response = await api.get('/spoonacular/search', { params });
+    return response.data;
+  },
+
+  getRecipe: async (id: number) => {
+    const response = await api.get(`/spoonacular/recipe/${id}`);
+    return response.data;
+  },
+
+  getNutrition: async (id: number) => {
+    const response = await api.get(`/spoonacular/recipe/${id}/nutrition`);
+    return response.data;
+  },
+
+  getSimilar: async (id: number, number: number = 6) => {
+    const response = await api.get(`/spoonacular/recipe/${id}/similar`, { params: { number } });
+    return response.data;
+  },
+
+  getRandom: async (tags?: string, number: number = 10) => {
+    const response = await api.get('/spoonacular/random', { params: { tags, number } });
+    return response.data;
+  },
+
+  autocomplete: async (query: string, number: number = 10) => {
+    const response = await api.get('/spoonacular/autocomplete', { params: { query, number } });
+    return response.data;
+  },
+
+  generateMealPlan: async (params: {
+    timeFrame?: 'day' | 'week';
+    targetCalories?: number;
+    diet?: string;
+    exclude?: string;
+  }) => {
+    const response = await api.get('/spoonacular/meal-plan', { params });
+    return response.data;
+  },
+
+  searchByIngredients: async (ingredients: string, number: number = 12) => {
+    const response = await api.get('/spoonacular/search-by-ingredients', {
+      params: { ingredients, number },
+    });
+    return response.data;
+  },
+
+  searchByNutrients: async (params: Record<string, any>) => {
+    const response = await api.get('/spoonacular/search-by-nutrients', { params });
+    return response.data;
+  },
+
+  getInstructions: async (id: number) => {
+    const response = await api.get(`/spoonacular/recipe/${id}/instructions`);
+    return response.data;
+  },
+};
+
 export default api;
 
