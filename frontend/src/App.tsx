@@ -28,6 +28,11 @@ import ActivityFeedPage from './pages/ActivityFeedPage';
 import MealPlannerPage from './pages/MealPlannerPage';
 import ShoppingListPage from './pages/ShoppingListPage';
 
+// New pages (Sprint 6)
+import AISuggestionsPage from './pages/AISuggestionsPage';
+import SmartSearchPage from './pages/SmartSearchPage';
+import CookingModePage from './pages/CookingModePage';
+
 // Auth callback page for Google OAuth
 const AuthCallback: React.FC = () => {
     useEffect(() => {
@@ -88,6 +93,10 @@ const App: React.FC = () => {
                         {/* Meal planning (Sprint 5) */}
                         <Route path="/meal-planner" element={<MealPlannerPage />} />
                         <Route path="/shopping-list/:id" element={<ShoppingListPage />} />
+                        {/* AI & Polish (Sprint 6) */}
+                        <Route path="/ai-suggestions" element={<AISuggestionsPage />} />
+                        <Route path="/search" element={<SmartSearchPage />} />
+                        <Route path="/cook/:slug" element={<CookingModePage />} />
                         {/* Legacy routes */}
                         <Route path="/add-recipe" element={<AddRecipes />} />
                         <Route path="/contact" element={<ContactUs />} />

@@ -14,12 +14,14 @@ import {
     Flame,
     ChevronLeft,
     Heart,
+    Play,
 } from 'lucide-react';
 import { recipeApi } from '../services/api';
 import { useAuthStore } from '../stores/authStore';
 import { Button } from '../components/ui/Button';
 import ReviewSection from '../components/recipe/ReviewSection';
 import NutritionOverview from '../components/recipe/NutritionOverview';
+import RecipeRecommendations from '../components/recipe/RecipeRecommendations';
 import { cn, formatTime } from '../utils/helpers';
 import { Recipe, Ingredient, Instruction } from '../types';
 
@@ -421,11 +423,23 @@ const RecipeDetailPage: React.FC = () => {
                                     </div>
                                 )}
 
-                                {/* Made It button */}
                                 <Button className="w-full mt-6" leftIcon={<Heart className="w-4 h-4" />}>
                                     I Made This!
                                 </Button>
+                                <Link to={`/cook/${recipe.slug || recipe._id}`} className="block mt-3">
+                                    <Button variant="secondary" className="w-full" leftIcon={<Play className="w-4 h-4" />}>
+                                        Start Cooking Mode
+                                    </Button>
+                                </Link>
                             </div>
+
+                            {/* Recommendations */}
+                            <RecipeRecommendations
+                                currentRecipeId={recipe._id}
+                                category={recipe.category}
+                                cuisine={recipe.cuisine}
+                                className="mt-6 bg-white dark:bg-surface-800 rounded-2xl p-6 shadow-soft"
+                            />
                         </div>
                     </div>
                 </div>

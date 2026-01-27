@@ -138,8 +138,8 @@ export const userApi = {
 
 // Recipe API
 export const recipeApi = {
-  getAll: async (filters?: RecipeFilters): Promise<ApiResponse<PaginatedResponse<Recipe>>> => {
-    const response = await api.get<ApiResponse<PaginatedResponse<Recipe>>>('/recipes', { params: filters });
+  getAll: async (filters?: RecipeFilters): Promise<ApiResponse<any>> => {
+    const response = await api.get<ApiResponse<any>>('/recipes', { params: filters });
     return response.data;
   },
   
