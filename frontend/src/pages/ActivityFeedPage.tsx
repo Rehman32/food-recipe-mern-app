@@ -1,161 +1,170 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Rss, Star, ChefHat, Clock, Users } from 'lucide-react';
-import { recipeApi } from '../services/api';
-import { useAuthStore } from '../stores/authStore';
-import { Button } from '../components/ui/Button';
-import { formatDate, formatTime } from '../utils/helpers';
+import {
+    Rss, Star, ChefHat, Clock, Flame,
+    Heart, ArrowRight, TrendingUp, Sparkles,
+} from 'lucide-react';
+import { spoonacularApi } from '../services/api';
 
 const ActivityFeedPage: React.FC = () => {
-    const { user } = useAuthStore();
-
-    // Show trending/latest recipes as feed content
-    const { data: trendingData, isLoading: trendingLoading } = useQuery({
-        queryKey: ['feedTrending'],
-        queryFn: () => recipeApi.getTrending(),
-    });
-
+    // Latest recipes via Spoonacular search (sorted by time)
     const { data: latestData, isLoading: latestLoading } = useQuery({
         queryKey: ['feedLatest'],
-        queryFn: () => recipeApi.getAll({ sort: 'newest' } as any),
+        queryFn: () => spoonacularApi.search({ sort: 'time', number: 10 }),
+        staleTime: 5 * 60 * 1000,
     });
 
+    // Trending = popular random recipes
+    const { data: trendingData, isLoading: trendingLoading } = useQuery({
+        queryKey: ['feedTrending'],
+        queryFn: () => spoonacularApi.getRandom(undefined, 5),
+        staleTime: 5 * 60 * 1000,
+    });
+
+    const latest = latestData?.data?.results || [];
     const trending = trendingData?.data?.recipes || [];
-    const latest = latestData?.data?.recipes || latestData?.data?.data || [];
-    const isLoading = trendingLoading || latestLoading;
+
+    const getCalories = (recipe: any) => {
+        const cal = recipe.nutrition?.nutrients?.find((n: any) => n.name === 'Calories');
+        return cal ? Math.round(cal.amount) : null;
+    };
 
     return (
-        <div className="min-h-screen bg-surface-50 dark:bg-surface-950">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
             {/* Header */}
-            <div className="bg-white dark:bg-surface-900 border-b border-surface-200 dark:border-surface-800">
-                <div className="container mx-auto px-4 py-8">
+            <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <div className="flex items-center gap-3">
-                        <Rss className="w-7 h-7 text-primary-500" />
+                        <div className="p-2 rounded-xl bg-gradient-to-br from-orange-400 to-pink-500">
+                            <Rss className="w-6 h-6 text-white" />
+                        </div>
                         <div>
-                            <h1 className="text-3xl font-bold text-surface-900 dark:text-white">Activity Feed</h1>
-                            <p className="text-surface-600 dark:text-surface-400">Discover what's trending and new in the community</p>
+                            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Activity Feed</h1>
+                            <p className="text-gray-600 dark:text-gray-400">Discover what's trending and new in the community</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="container mx-auto px-4 py-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="grid lg:grid-cols-3 gap-8">
-                    {/* Main Feed */}
+                    {/* Main Feed — Latest */}
                     <div className="lg:col-span-2 space-y-6">
-                        <h2 className="text-xl font-bold text-surface-900 dark:text-white flex items-center gap-2">
-                            <Clock className="w-5 h-5 text-primary-500" /> Latest Recipes
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                            <Clock className="w-5 h-5 text-indigo-500" /> Latest Recipes
                         </h2>
 
-                        {isLoading ? (
+                        {latestLoading ? (
                             <div className="space-y-4">
                                 {Array.from({ length: 4 }).map((_, i) => (
-                                    <div key={i} className="bg-white dark:bg-surface-800 rounded-2xl p-6 animate-pulse h-40" />
+                                    <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl animate-pulse h-44 shadow-sm" />
                                 ))}
                             </div>
                         ) : latest.length === 0 ? (
-                            <div className="text-center py-16 bg-white dark:bg-surface-800 rounded-2xl">
-                                <ChefHat className="w-16 h-16 text-surface-300 dark:text-surface-600 mx-auto mb-4" />
-                                <p className="text-surface-500">No recipes in the feed yet.</p>
+                            <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl shadow-sm">
+                                <ChefHat className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+                                <p className="text-gray-500 dark:text-gray-400">No recipes in the feed yet.</p>
                             </div>
                         ) : (
                             <div className="space-y-4">
-                                {latest.slice(0, 10).map((recipe: any) => {
-                                    const authorName = typeof recipe.author === 'object' ? recipe.author.name : 'Anonymous';
-                                    const authorUsername = typeof recipe.author === 'object' ? recipe.author.username : '';
-
-                                    return (
-                                        <Link
-                                            key={recipe._id}
-                                            to={`/recipes/${recipe.slug || recipe._id}`}
-                                            className="block bg-white dark:bg-surface-800 rounded-2xl overflow-hidden shadow-soft hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
-                                        >
-                                            <div className="flex flex-col sm:flex-row">
-                                                {recipe.images?.[0]?.url && (
-                                                    <div className="sm:w-48 h-40 sm:h-auto flex-shrink-0">
-                                                        <img src={recipe.images[0].url} alt={recipe.title} className="w-full h-full object-cover" />
-                                                    </div>
-                                                )}
-                                                <div className="p-5 flex-1">
-                                                    <div className="flex items-center gap-2 text-xs text-surface-500 mb-2">
+                                {latest.map((recipe: any) => (
+                                    <Link
+                                        key={recipe.id}
+                                        to={`/recipes/${recipe.id}`}
+                                        className="block bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100 dark:border-gray-700"
+                                    >
+                                        <div className="flex flex-col sm:flex-row">
+                                            <div className="sm:w-52 h-44 sm:h-auto flex-shrink-0">
+                                                <img src={recipe.image} alt={recipe.title} className="w-full h-full object-cover" loading="lazy" />
+                                            </div>
+                                            <div className="p-5 flex-1">
+                                                <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mb-2 flex-wrap">
+                                                    {recipe.vegan && <span className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-0.5 rounded-full font-medium">Vegan</span>}
+                                                    {!recipe.vegan && recipe.vegetarian && <span className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-0.5 rounded-full font-medium">Vegetarian</span>}
+                                                    {recipe.glutenFree && <span className="bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full font-medium">Gluten Free</span>}
+                                                    {recipe.dairyFree && <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-2 py-0.5 rounded-full font-medium">Dairy Free</span>}
+                                                </div>
+                                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-1">{recipe.title}</h3>
+                                                <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-3" dangerouslySetInnerHTML={{ __html: recipe.summary?.replace(/<[^>]+>/g, '').slice(0, 120) + '...' || '' }} />
+                                                <div className="flex items-center gap-4 text-sm text-gray-400">
+                                                    {recipe.readyInMinutes && (
+                                                        <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{recipe.readyInMinutes}m</span>
+                                                    )}
+                                                    {recipe.healthScore > 0 && (
                                                         <span className="flex items-center gap-1">
-                                                            <ChefHat className="w-3.5 h-3.5" />
-                                                            {authorName}
+                                                            <Heart className="w-3.5 h-3.5 text-red-400 fill-red-400" />{recipe.healthScore}
                                                         </span>
-                                                        <span>•</span>
-                                                        <span>{formatDate(recipe.createdAt)}</span>
-                                                    </div>
-                                                    <h3 className="text-lg font-semibold text-surface-900 dark:text-white mb-2">{recipe.title}</h3>
-                                                    <p className="text-sm text-surface-500 line-clamp-2 mb-3">{recipe.description}</p>
-                                                    <div className="flex items-center gap-4 text-sm text-surface-400">
-                                                        {recipe.totalTime && (
-                                                            <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{formatTime(recipe.totalTime)}</span>
-                                                        )}
-                                                        {recipe.stats?.averageRating > 0 && (
-                                                            <span className="flex items-center gap-1">
-                                                                <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-                                                                {recipe.stats.averageRating.toFixed(1)}
-                                                            </span>
-                                                        )}
-                                                        <span className="px-2 py-0.5 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded-full text-xs capitalize">{recipe.category}</span>
-                                                    </div>
+                                                    )}
+                                                    {getCalories(recipe) && (
+                                                        <span className="flex items-center gap-1"><Flame className="w-3.5 h-3.5 text-orange-500" />{getCalories(recipe)} cal</span>
+                                                    )}
+                                                    {recipe.cuisines?.length > 0 && (
+                                                        <span className="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full text-xs capitalize">{recipe.cuisines[0]}</span>
+                                                    )}
+                                                </div>
+                                                <div className="mt-3 flex items-center text-indigo-500 text-sm font-medium hover:gap-2 transition-all">
+                                                    View Recipe <ArrowRight className="w-4 h-4 ml-1" />
                                                 </div>
                                             </div>
-                                        </Link>
-                                    );
-                                })}
+                                        </div>
+                                    </Link>
+                                ))}
                             </div>
                         )}
                     </div>
 
                     {/* Sidebar — Trending */}
                     <div>
-                        <h2 className="text-xl font-bold text-surface-900 dark:text-white flex items-center gap-2 mb-4">
-                            <Star className="w-5 h-5 text-yellow-500" /> Trending
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
+                            <TrendingUp className="w-5 h-5 text-orange-500" /> Trending
                         </h2>
                         <div className="space-y-3">
                             {trendingLoading ? (
                                 Array.from({ length: 5 }).map((_, i) => (
-                                    <div key={i} className="bg-white dark:bg-surface-800 rounded-xl p-4 animate-pulse h-20" />
+                                    <div key={i} className="bg-white dark:bg-gray-800 rounded-xl p-4 animate-pulse h-20 shadow-sm" />
                                 ))
                             ) : trending.length === 0 ? (
-                                <p className="text-surface-500 text-sm">No trending recipes yet.</p>
+                                <p className="text-gray-500 text-sm">No trending recipes yet.</p>
                             ) : (
-                                trending.slice(0, 5).map((recipe: any, idx: number) => (
+                                trending.map((recipe: any, idx: number) => (
                                     <Link
-                                        key={recipe._id}
-                                        to={`/recipes/${recipe.slug || recipe._id}`}
-                                        className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-surface-800 hover:shadow-md transition-all group"
+                                        key={recipe.id}
+                                        to={`/recipes/${recipe.id}`}
+                                        className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-gray-800 hover:shadow-md transition-all group border border-gray-100 dark:border-gray-700"
                                     >
-                                        <span className="text-2xl font-bold text-surface-200 dark:text-surface-700 w-8">{idx + 1}</span>
-                                        {recipe.images?.[0]?.url ? (
-                                            <img src={recipe.images[0].url} alt="" className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />
-                                        ) : (
-                                            <div className="w-12 h-12 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0">
-                                                <ChefHat className="w-5 h-5 text-primary-500" />
+                                        <span className="text-2xl font-bold text-gray-200 dark:text-gray-700 w-8">{idx + 1}</span>
+                                        <img
+                                            src={recipe.image}
+                                            alt=""
+                                            className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+                                            loading="lazy"
+                                        />
+                                        <div className="min-w-0 flex-1">
+                                            <h4 className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-indigo-500 transition-colors truncate">{recipe.title}</h4>
+                                            <div className="flex items-center gap-2 text-xs text-gray-400 mt-0.5">
+                                                {recipe.readyInMinutes && (
+                                                    <span className="flex items-center gap-0.5"><Clock className="w-3 h-3" />{recipe.readyInMinutes}m</span>
+                                                )}
+                                                {recipe.healthScore > 0 && (
+                                                    <span className="flex items-center gap-0.5">
+                                                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                                                        {recipe.healthScore}
+                                                    </span>
+                                                )}
                                             </div>
-                                        )}
-                                        <div className="min-w-0">
-                                            <h4 className="text-sm font-medium text-surface-900 dark:text-white group-hover:text-primary-500 transition-colors truncate">{recipe.title}</h4>
-                                            {recipe.stats?.averageRating > 0 && (
-                                                <div className="flex items-center gap-1 text-xs text-surface-400">
-                                                    <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                                                    {recipe.stats.averageRating.toFixed(1)}
-                                                </div>
-                                            )}
                                         </div>
                                     </Link>
                                 ))
                             )}
                         </div>
 
-                        {/* Community Stats (static placeholder) */}
-                        <div className="mt-8 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl p-6 text-white">
-                            <h3 className="font-semibold mb-4 flex items-center gap-2"><Users className="w-5 h-5" /> Community</h3>
+                        {/* Community Stats */}
+                        <div className="mt-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg">
+                            <h3 className="font-semibold mb-4 flex items-center gap-2"><Sparkles className="w-5 h-5" /> Community</h3>
                             <div className="grid grid-cols-2 gap-4 text-center">
                                 <div>
-                                    <p className="text-2xl font-bold">1K+</p>
+                                    <p className="text-2xl font-bold">5K+</p>
                                     <p className="text-xs text-white/70">Recipes</p>
                                 </div>
                                 <div>
