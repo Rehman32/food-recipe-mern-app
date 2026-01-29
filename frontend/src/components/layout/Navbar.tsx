@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
                             <div className="p-2 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 text-white">
                                 <ChefHat className="w-5 h-5" />
                             </div>
-                            <span className="hidden sm:block font-display">RecipeHub</span>
+                            <span className="hidden sm:block font-display">FlavorAI</span>
                         </Link>
 
                         {/* Desktop Navigation */}

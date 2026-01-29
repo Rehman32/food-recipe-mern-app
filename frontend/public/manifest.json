@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "FlavorAI",
+  "name": "FlavorAI — AI Recipe Platform",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +20,7 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#f97316",
+  "background_color": "#ffffff",
+  "description": "AI-powered recipe discovery with nutrition tracking, smart diet filters, and meal planning."
 }

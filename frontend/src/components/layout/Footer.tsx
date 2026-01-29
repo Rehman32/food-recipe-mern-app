@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ChefHat, Github, Twitter, Instagram, Mail } from 'lucide-react';
+import { ChefHat, Github, Mail } from 'lucide-react';
 
 const Footer: React.FC = () => {
     const currentYear = new Date().getFullYear();
@@ -8,49 +8,44 @@ const Footer: React.FC = () => {
     const footerLinks = {
         product: [
             { label: 'Browse Recipes', to: '/recipes' },
-            { label: 'AI Suggestions', to: '/ai-suggestions' },
+            { label: 'AI Chef', to: '/ai-suggestions' },
             { label: 'Smart Search', to: '/search' },
-            { label: 'Activity Feed', to: '/feed' },
-            { label: 'Add Recipe', to: '/add-recipe' },
+            { label: 'Nutrition Finder', to: '/nutrition' },
             { label: 'Meal Planner', to: '/meal-planner' },
+            { label: 'Activity Feed', to: '/feed' },
             { label: 'Collections', to: '/collections' },
         ],
         company: [
             { label: 'About Us', to: '/about' },
             { label: 'Contact', to: '/contact' },
-            { label: 'Careers', to: '/careers' },
-            { label: 'Blog', to: '/blog' },
         ],
         legal: [
             { label: 'Privacy Policy', to: '/privacy' },
             { label: 'Terms of Service', to: '/terms' },
-            { label: 'Cookie Policy', to: '/cookies' },
         ],
     };
 
     const socialLinks = [
-        { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
-        { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
-        { icon: Github, href: 'https://github.com', label: 'GitHub' },
-        { icon: Mail, href: 'mailto:hello@recipehub.com', label: 'Email' },
+        { icon: Github, href: 'https://github.com/Rehman32', label: 'GitHub' },
+        { icon: Mail, href: 'mailto:sharplogix.solutions.32@gmail.com', label: 'Email' },
     ];
 
     return (
-        <footer className="bg-surface-50 dark:bg-surface-900 border-t border-surface-200 dark:border-surface-800">
-            <div className="container mx-auto px-4 py-12">
+        <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
                     {/* Brand */}
                     <div className="col-span-2 md:col-span-1">
                         <Link to="/" className="flex items-center gap-2 mb-4">
-                            <div className="p-2 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 text-white">
+                            <div className="p-2 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 text-white">
                                 <ChefHat className="w-5 h-5" />
                             </div>
-                            <span className="text-xl font-bold font-display text-surface-900 dark:text-white">
-                                RecipeHub
+                            <span className="text-xl font-bold text-gray-900 dark:text-white">
+                                FlavorAI
                             </span>
                         </Link>
-                        <p className="text-sm text-surface-600 dark:text-surface-400 mb-4">
-                            Discover, create, and share delicious recipes with a community of food lovers.
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                            AI-powered recipe discovery with real nutrition data, smart diet filters, and intelligent meal planning.
                         </p>
                         <div className="flex gap-3">
                             {socialLinks.map((social) => (
@@ -59,7 +54,7 @@ const Footer: React.FC = () => {
                                     href={social.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="p-2 rounded-lg text-surface-500 hover:text-primary-500 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors"
+                                    className="p-2 rounded-lg text-gray-500 hover:text-orange-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                                     aria-label={social.label}
                                 >
                                     <social.icon className="w-5 h-5" />
@@ -70,13 +65,13 @@ const Footer: React.FC = () => {
 
                     {/* Product */}
                     <div>
-                        <h3 className="font-semibold text-surface-900 dark:text-white mb-4">Product</h3>
+                        <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Product</h3>
                         <ul className="space-y-2">
                             {footerLinks.product.map((link) => (
                                 <li key={link.to}>
                                     <Link
                                         to={link.to}
-                                        className="text-sm text-surface-600 dark:text-surface-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+                                        className="text-sm text-gray-600 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
                                     >
                                         {link.label}
                                     </Link>
@@ -87,30 +82,27 @@ const Footer: React.FC = () => {
 
                     {/* Company */}
                     <div>
-                        <h3 className="font-semibold text-surface-900 dark:text-white mb-4">Company</h3>
+                        <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Company</h3>
                         <ul className="space-y-2">
                             {footerLinks.company.map((link) => (
                                 <li key={link.to}>
                                     <Link
                                         to={link.to}
-                                        className="text-sm text-surface-600 dark:text-surface-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+                                        className="text-sm text-gray-600 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
                                     >
                                         {link.label}
                                     </Link>
                                 </li>
                             ))}
                         </ul>
-                    </div>
 
-                    {/* Legal */}
-                    <div>
-                        <h3 className="font-semibold text-surface-900 dark:text-white mb-4">Legal</h3>
+                        <h3 className="font-semibold text-gray-900 dark:text-white mb-4 mt-6">Legal</h3>
                         <ul className="space-y-2">
                             {footerLinks.legal.map((link) => (
                                 <li key={link.to}>
                                     <Link
                                         to={link.to}
-                                        className="text-sm text-surface-600 dark:text-surface-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+                                        className="text-sm text-gray-600 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
                                     >
                                         {link.label}
                                     </Link>
@@ -118,15 +110,46 @@ const Footer: React.FC = () => {
                             ))}
                         </ul>
                     </div>
+
+                    {/* Contact */}
+                    <div>
+                        <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Get in Touch</h3>
+                        <ul className="space-y-3">
+                            <li>
+                                <a
+                                    href="mailto:sharplogix.solutions.32@gmail.com"
+                                    className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
+                                >
+                                    <Mail className="w-4 h-4 flex-shrink-0" />
+                                    sharplogix.solutions.32@gmail.com
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/Rehman32"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
+                                >
+                                    <Github className="w-4 h-4 flex-shrink-0" />
+                                    github.com/Rehman32
+                                </a>
+                            </li>
+                        </ul>
+                        <div className="mt-6 p-4 rounded-xl bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border border-orange-100 dark:border-orange-800/30">
+                            <p className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Built by SharpLogix Solutions</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Web Apps · Mobile Apps · AI/ML</p>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Bottom */}
-                <div className="mt-12 pt-8 border-t border-surface-200 dark:border-surface-800 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <p className="text-sm text-surface-500">
-                        © {currentYear} RecipeHub. All rights reserved.
+                <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <p className="text-sm text-gray-500">
+                        © {currentYear} FlavorAI by SharpLogix Solutions. All rights reserved.
                     </p>
-                    <p className="text-sm text-surface-500">
-                        Made with ❤️ for food lovers
+                    <p className="text-sm text-gray-500">
+                        Powered by Spoonacular · Made with ❤️
                     </p>
                 </div>
             </div>

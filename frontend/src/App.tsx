@@ -30,6 +30,7 @@ import ShoppingListPage from './pages/ShoppingListPage';
 import AISuggestionsPage from './pages/AISuggestionsPage';
 import SmartSearchPage from './pages/SmartSearchPage';
 import CookingModePage from './pages/CookingModePage';
+import AboutPage from './pages/AboutPage';
 
 // Auth callback page for Google OAuth
 const AuthCallback: React.FC = () => {
@@ -99,6 +100,7 @@ const App: React.FC = () => {
                         <Route path="/nutrition" element={<NutritionPage />} />
                         {/* Legacy routes */}
                         <Route path="/contact" element={<ContactUs />} />
+                        <Route path="/about" element={<AboutPage />} />
                         <Route path="/auth/callback" element={<AuthCallback />} />
                     </Routes>
                 </main>

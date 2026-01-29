@@ -94,7 +94,7 @@ const HomePage: React.FC = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                         {[
-                            { icon: Sparkles, title: 'AI Meal Plans', desc: 'Auto-generate daily plans', link: '/meal-plan', color: 'from-purple-500 to-indigo-600' },
+                            { icon: Sparkles, title: 'AI Meal Plans', desc: 'Auto-generate daily plans', link: '/meal-planner', color: 'from-purple-500 to-indigo-600' },
                             { icon: Search, title: 'Smart Search', desc: 'By diet, nutrients, ingredients', link: '/search', color: 'from-blue-500 to-cyan-600' },
                             { icon: Flame, title: 'Calorie Tracker', desc: 'Detailed nutrition data', link: '/nutrition', color: 'from-orange-500 to-red-600' },
                             { icon: Leaf, title: 'Diet Filters', desc: 'Vegan, keto, gluten-free', link: '/recipes', color: 'from-green-500 to-emerald-600' },
@@ -272,7 +272,7 @@ const HomePage: React.FC = () => {
                             Smart Search
                         </Link>
                         <Link
-                            to="/meal-plan"
+                            to="/meal-planner"
                             className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-purple-600 hover:to-indigo-700 transition-all shadow-lg"
                         >
                             <CalendarDays className="w-5 h-5" />

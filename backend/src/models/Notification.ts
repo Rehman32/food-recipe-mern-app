@@ -57,8 +57,8 @@ notificationSchema.index({ recipient: 1, read: 1 });
 
 // Auto-populate sender
 notificationSchema.pre(/^find/, function (next) {
-  this.populate({ path: 'sender', select: 'name username avatar' });
-  this.populate({ path: 'recipe', select: 'title slug' });
+  (this as any).populate({ path: 'sender', select: 'name username avatar' });
+  (this as any).populate({ path: 'recipe', select: 'title slug' });
   next();
 });
 

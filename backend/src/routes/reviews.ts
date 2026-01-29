@@ -142,7 +142,7 @@ router.put(
     // Check ownership - author may be populated or ObjectId
     const authorId = typeof review.author === 'object' && 'id' in review.author
       ? (review.author as any)._id?.toString()
-      : review.author.toString();
+      : (review.author as any).toString();
 
     if (authorId !== userId) {
       throw new AppError('Not authorized to update this review', 403);
@@ -184,7 +184,7 @@ router.delete(
     // Check ownership
     const authorId = typeof review.author === 'object' && '_id' in review.author
       ? (review.author as any)._id?.toString()
-      : review.author.toString();
+      : (review.author as any).toString();
 
     if (authorId !== userId && userRole !== 'admin') {
       throw new AppError('Not authorized to delete this review', 403);
@@ -219,7 +219,7 @@ router.post(
     // Check ownership
     const authorId = typeof review.author === 'object' && '_id' in review.author
       ? (review.author as any)._id?.toString()
-      : review.author.toString();
+      : (review.author as any).toString();
 
     if (authorId !== userId) {
       throw new AppError('Not authorized to update this review', 403);

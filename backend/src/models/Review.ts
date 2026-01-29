@@ -66,7 +66,7 @@ reviewSchema.index({ recipe: 1, author: 1 }, { unique: true }); // One review pe
 
 // Populate author on find
 reviewSchema.pre(/^find/, function (next) {
-  this.populate({
+  (this as any).populate({
     path: 'author',
     select: 'name username avatar',
   });
