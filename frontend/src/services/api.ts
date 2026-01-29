@@ -9,8 +9,6 @@ import {
   Recipe,
   Review,
   Collection,
-  Notification,
-  PaginatedResponse,
   RecipeFilters
 } from '../types';
 

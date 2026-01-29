@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ChevronLeft, Trash2, Settings, Globe, Lock } from 'lucide-react';
+import { ChevronLeft, Trash2, Globe, Lock } from 'lucide-react';
 import { collectionApi } from '../services/api';
 import { useAuthStore } from '../stores/authStore';
 import RecipeGrid from '../components/recipe/RecipeGrid';
@@ -25,11 +25,6 @@ const CollectionDetailPage: React.FC = () => {
             queryClient.invalidateQueries({ queryKey: ['myCollections'] });
             navigate('/collections');
         },
-    });
-
-    const removeRecipeMutation = useMutation({
-        mutationFn: (recipeId: string) => collectionApi.removeRecipe(id!, recipeId),
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['collection', id] }),
     });
 
     const collection = data?.data?.collection;

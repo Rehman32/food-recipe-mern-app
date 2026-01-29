@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-    MapPin, Calendar, ChefHat, Users, BookOpen, Heart, Settings, UserPlus, UserMinus, Camera,
+    MapPin, Calendar, ChefHat, Users, BookOpen, Heart, Settings, UserPlus, Camera,
 } from 'lucide-react';
-import { userApi, recipeApi } from '../services/api';
+import { userApi } from '../services/api';
 import { useAuthStore } from '../stores/authStore';
 import RecipeGrid from '../components/recipe/RecipeGrid';
 import { Button } from '../components/ui/Button';

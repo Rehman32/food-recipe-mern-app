@@ -41,7 +41,6 @@ const AuthCallback: React.FC = () => {
 
         if (accessToken && refreshToken) {
             // Store tokens in zustand (will be handled by authStore)
-            const authData = { accessToken, refreshToken };
             localStorage.setItem('recipe-platform-auth', JSON.stringify({
                 state: {
                     accessToken,
@@ -63,7 +62,7 @@ const AuthCallback: React.FC = () => {
 };
 
 const App: React.FC = () => {
-    const { theme, resolvedTheme } = useThemeStore();
+    const { resolvedTheme } = useThemeStore();
 
     // Apply theme on mount
     useEffect(() => {
