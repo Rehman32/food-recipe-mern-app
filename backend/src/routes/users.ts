@@ -1,11 +1,49 @@
 import { Router, Request, Response } from 'express';
 import User from '../models/User';
+import Recipe from '../models/Recipe';
+import Collection from '../models/Collection';
 import { protect, optionalAuth } from '../middleware/auth';
 import { asyncHandler, AppError } from '../middleware/errorHandler';
 import { uploadAvatar } from '../config/cloudinary';
 import { ApiResponse } from '../types';
 
 const router = Router();
+
+/**
+ * @route   GET /api/users/:username/recipes
+ * @desc    Get a user's published recipes
+ * @access  Public
+ */
+router.get(
+  '/:username/recipes',
+  asyncHandler(async (req: Request, res: Response<ApiResponse>) => {
+    const user = await User.findOne({ username: req.params.username });
+    if (!user) throw new AppError('User not found', 404);
+
+    const recipes = await Recipe.find({ author: user._id, status: 'published' })
+      .sort({ createdAt: -1 });
+
+    res.json({ success: true, data: { recipes } });
+  })
+);
+
+/**
+ * @route   GET /api/users/:username/collections
+ * @desc    Get a user's public collections
+ * @access  Public
+ */
+router.get(
+  '/:username/collections',
+  asyncHandler(async (req: Request, res: Response<ApiResponse>) => {
+    const user = await User.findOne({ username: req.params.username });
+    if (!user) throw new AppError('User not found', 404);
+
+    const collections = await Collection.find({ owner: user._id, isPublic: true })
+      .sort({ updatedAt: -1 });
+
+    res.json({ success: true, data: { collections } });
+  })
+);
 
 /**
  * @route   GET /api/users/:username
