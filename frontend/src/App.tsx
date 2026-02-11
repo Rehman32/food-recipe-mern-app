@@ -6,12 +6,19 @@ import { useThemeStore } from './stores/themeStore';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 
-// Pages - keeping existing ones for now, will upgrade in Sprint 2
+// Legacy pages
 import Home from './pages/home';
 import RecipeList from './pages/RecipeList';
 import RecipeDetails from './components/RecipeDetail';
 import AddRecipes from './pages/AddRecipes';
 import ContactUs from './pages/ContactUs';
+
+// New pages (Sprint 2 & 3)
+import RecipeListPage from './pages/RecipeListPage';
+import RecipeDetailPage from './pages/RecipeDetailPage';
+import ProfilePage from './pages/ProfilePage';
+import CollectionsPage from './pages/CollectionsPage';
+import CollectionDetailPage from './pages/CollectionDetailPage';
 
 // Auth callback page for Google OAuth
 const AuthCallback: React.FC = () => {
@@ -60,8 +67,14 @@ const App: React.FC = () => {
                 <main className="flex-1">
                     <Routes>
                         <Route path="/" element={<Home />} />
-                        <Route path="/recipes" element={<RecipeList />} />
-                        <Route path="/recipes/:id" element={<RecipeDetails />} />
+                        {/* New recipe pages (Sprint 2) */}
+                        <Route path="/recipes" element={<RecipeListPage />} />
+                        <Route path="/recipes/:slug" element={<RecipeDetailPage />} />
+                        {/* User profile & collections (Sprint 3) */}
+                        <Route path="/profile/:username" element={<ProfilePage />} />
+                        <Route path="/collections" element={<CollectionsPage />} />
+                        <Route path="/collections/:id" element={<CollectionDetailPage />} />
+                        {/* Legacy routes */}
                         <Route path="/add-recipe" element={<AddRecipes />} />
                         <Route path="/contact" element={<ContactUs />} />
                         <Route path="/auth/callback" element={<AuthCallback />} />
