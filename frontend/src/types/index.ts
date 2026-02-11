@@ -9,6 +9,7 @@ export interface User {
   location: string;
   preferences: UserPreferences;
   stats: UserStats;
+  savedRecipes: string[];
   role: 'user' | 'admin' | 'moderator';
   isVerified: boolean;
   createdAt: string;

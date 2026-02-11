@@ -7,6 +7,7 @@ import {
   RegisterCredentials,
   User,
   Recipe,
+  Collection,
   PaginatedResponse,
   RecipeFilters
 } from '../types';
@@ -121,9 +122,19 @@ export const userApi = {
     const response = await api.delete<ApiResponse>(`/users/${userId}/follow`);
     return response.data;
   },
+
+  getRecipes: async (username: string): Promise<ApiResponse<{ recipes: Recipe[] }>> => {
+    const response = await api.get<ApiResponse<{ recipes: Recipe[] }>>(`/users/${username}/recipes`);
+    return response.data;
+  },
+
+  getCollections: async (username: string): Promise<ApiResponse<{ collections: Collection[] }>> => {
+    const response = await api.get<ApiResponse<{ collections: Collection[] }>>(`/users/${username}/collections`);
+    return response.data;
+  },
 };
 
-// Recipe API (placeholder for Sprint 2)
+// Recipe API
 export const recipeApi = {
   getAll: async (filters?: RecipeFilters): Promise<ApiResponse<PaginatedResponse<Recipe>>> => {
     const response = await api.get<ApiResponse<PaginatedResponse<Recipe>>>('/recipes', { params: filters });
@@ -132,6 +143,16 @@ export const recipeApi = {
   
   getBySlug: async (slug: string): Promise<ApiResponse<{ recipe: Recipe }>> => {
     const response = await api.get<ApiResponse<{ recipe: Recipe }>>(`/recipes/${slug}`);
+    return response.data;
+  },
+  
+  getFeatured: async (): Promise<ApiResponse<{ recipes: Recipe[] }>> => {
+    const response = await api.get<ApiResponse<{ recipes: Recipe[] }>>('/recipes/featured');
+    return response.data;
+  },
+  
+  getTrending: async (): Promise<ApiResponse<{ recipes: Recipe[] }>> => {
+    const response = await api.get<ApiResponse<{ recipes: Recipe[] }>>('/recipes/trending');
     return response.data;
   },
   
@@ -157,6 +178,44 @@ export const recipeApi = {
   
   unsave: async (id: string): Promise<ApiResponse> => {
     const response = await api.delete<ApiResponse>(`/recipes/${id}/save`);
+    return response.data;
+  },
+};
+
+// Collection API
+export const collectionApi = {
+  getAll: async (): Promise<ApiResponse<{ collections: Collection[] }>> => {
+    const response = await api.get<ApiResponse<{ collections: Collection[] }>>('/collections');
+    return response.data;
+  },
+  
+  getById: async (id: string): Promise<ApiResponse<{ collection: Collection }>> => {
+    const response = await api.get<ApiResponse<{ collection: Collection }>>(`/collections/${id}`);
+    return response.data;
+  },
+  
+  create: async (data: { name: string; description?: string; isPublic?: boolean }): Promise<ApiResponse<{ collection: Collection }>> => {
+    const response = await api.post<ApiResponse<{ collection: Collection }>>('/collections', data);
+    return response.data;
+  },
+  
+  update: async (id: string, data: Partial<Collection>): Promise<ApiResponse<{ collection: Collection }>> => {
+    const response = await api.put<ApiResponse<{ collection: Collection }>>(`/collections/${id}`, data);
+    return response.data;
+  },
+  
+  delete: async (id: string): Promise<ApiResponse> => {
+    const response = await api.delete<ApiResponse>(`/collections/${id}`);
+    return response.data;
+  },
+  
+  addRecipe: async (collectionId: string, recipeId: string): Promise<ApiResponse> => {
+    const response = await api.post<ApiResponse>(`/collections/${collectionId}/recipes`, { recipeId });
+    return response.data;
+  },
+  
+  removeRecipe: async (collectionId: string, recipeId: string): Promise<ApiResponse> => {
+    const response = await api.delete<ApiResponse>(`/collections/${collectionId}/recipes/${recipeId}`);
     return response.data;
   },
 };
