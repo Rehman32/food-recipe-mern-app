@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import { useThemeStore } from './stores/themeStore';
 
 // Layout components
@@ -104,6 +105,7 @@ const App: React.FC = () => {
                     </Routes>
                 </main>
                 <Footer />
+                <Analytics />
             </div>
         </BrowserRouter>
     );
